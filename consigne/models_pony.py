@@ -3,7 +3,7 @@ from pony.orm import db_session, select
 from datetime import date
 
 # Configurer la connexion à la base de données
-db = Database(provider='mysql', host='localhost', user='username', password='password', database='database_name')
+db = Database(provider='mysql', host='localhost', user='root', password='', database='fromagerie')
 
 
 # Définir les modèles de données
@@ -15,7 +15,7 @@ class Departement(db.Entity):
 
 class Commune(db.Entity):
     id = PrimaryKey(int, auto=True)
-    dep = Required(Departement, column='dep')
+    dep = Required(Departement, column='code_dept')
     cp = Optional(str, max_len=5, default=None)
     ville = Optional(str, max_len=50, default=None)
     Index(dep, cp, ville, name='commune_index')
@@ -29,7 +29,7 @@ class Client(db.Entity):
     adresse1cli = Optional(str, max_len=50, default=None)
     adresse2cli = Optional(str, max_len=50, default=None)
     adresse3cli = Optional(str, max_len=50, default=None)
-    villecli_id = Optional(int)
+    villecli_id = Optional(Commune, columns='id')
     telcli = Optional(str, max_len=10, default=None)
     emailcli = Optional(str, max_len=255, default=None)
     portcli = Optional(str, max_len=10, default=None)
@@ -57,6 +57,7 @@ class Conditionnement(db.Entity):
     poidscondit = Optional(int)
     prixcond = Optional(float, default=0.0000)
     ordreimp = Optional(int)
+    # codobj = Optional(Objet, column='codobj')
     objets = Set('ObjetCond')
 
 
@@ -80,7 +81,7 @@ class ObjetCond(db.Entity):
     qteobjdeb = Optional(int, default=0)
     qteobjfin = Optional(int, default=0)
     codobj = Required(Objet, column='codobj')
-    codcond = Required(Conditionnement, column='codcond')
+    codcond = Required(Conditionnement, column='idcondit')
     objets = Set(Objet)
     condit = Set(Conditionnement)
 
@@ -95,8 +96,8 @@ class Detail(db.Entity):
 
 class DetailObjet(db.Entity):
     id = PrimaryKey(int, auto=True)
-    detail_id = Required(Detail, column='detail_id')
-    objet_id = Required(Objet, column='objet_id')
+    detail_id = Required(Detail, column='id')
+    objet_id = Required(Objet, column='codobj')
 
 
 class Enseigne(db.Entity):
@@ -134,8 +135,8 @@ class Utilisateur(db.Entity):
 
 class RoleUtilisateur(db.Entity):
     id = PrimaryKey(int, auto=True)
-    utilisateur_id = Required(Utilisateur, column='utilisateur_id')
-    role_id = Required(Role, column='role_id')
+    utilisateur_id = Required(Utilisateur, column='code_utilisateur')
+    role_id = Required(Role, column='codrole')
 
 
 # Générer les tables dans la base de données
