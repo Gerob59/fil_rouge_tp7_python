@@ -1,0 +1,3 @@
+contenant l’architecture, les éléments changés selon le
+cahier des charges fournis, la description des serveurs
+virtuels python
