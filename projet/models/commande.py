@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Date, Float, Index
-from config.models_sqlalchemy import Base
+from config.sqlalchemy import Base
 
 
 class Commande(Base):
