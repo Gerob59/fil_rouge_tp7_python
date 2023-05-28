@@ -1,46 +1,49 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends, APIRouter
+from sqlalchemy.orm import Session
 from ..models import Commande
 from ..controllers import commande_controller
-from config.db import open_session
-from .router import get_router
+from config.db import get_db
 
-router = get_router()
-session = open_session()
+router = APIRouter()
 
 
-@router.get("/{commande_id}")
-def get_commande(commande_id: int):
-    commande = commande_controller.get_commande(session, commande_id)
+@router.get("/{commande_id}", response_model=Commande)
+def get_commande(commande_id: int, db: Session = Depends(get_db)):
+    commande = commande_controller.get_commande(db, commande_id)
     if not commande:
         raise HTTPException(status_code=404, detail="Commande not found")
     return commande
 
 
-@router.post("/")
-def create_commande(commande: Commande):
+@router.get("/", response_model=list[Commande])
+def get_all_commandes(db: Session = Depends(get_db)):
+    return commande_controller.get_all_commandes(db)
 
-    return commande_controller.create_commande(session, commande)
+
+@router.post("/", response_model=Commande)
+def create_commande(commande: Commande, db: Session = Depends(get_db)):
+    return commande_controller.create_commande(db, commande)
 
 
-@router.put("/{commande_id}")
-def update_commande(commande_id: int, updated_commande: Commande):
-    commande = commande_controller.get_commande(session, commande_id)
+@router.put("/{commande_id}", response_model=Commande)
+def update_commande(commande_id: int, updated_commande: Commande, db: Session = Depends(get_db)):
+    commande = commande_controller.get_commande(db, commande_id)
     if not commande:
         raise HTTPException(status_code=404, detail="Commande not found")
-    return commande_controller.update_commande(session, commande, updated_commande)
+    return commande_controller.update_commande(db, commande, updated_commande)
 
 
-@router.patch("/{commande_id}")
-def update_commande(commande_id: int, updated_commande: Commande):
-    commande = commande_controller.get_commande(session, commande_id)
+@router.patch("/{commande_id}", response_model=Commande)
+def update_commande(commande_id: int, updated_commande: Commande, db: Session = Depends(get_db)):
+    commande = commande_controller.get_commande(db, commande_id)
     if not commande:
         raise HTTPException(status_code=404, detail="Commande not found")
-    return commande_controller.update_commande(session, commande, updated_commande)
+    return commande_controller.update_commande(db, commande, updated_commande)
 
 
-@router.delete("/{commande_id}")
-def delete_commande(commande_id: int):
-    commande = commande_controller.get_commande(session, commande_id)
+@router.delete("/{commande_id}", response_model=dict)
+def delete_commande(commande_id: int, db: Session = Depends(get_db)):
+    commande = commande_controller.get_commande(db, commande_id)
     if not commande:
         raise HTTPException(status_code=404, detail="Commande not found")
-    return commande_controller.delete_commande(session, commande)
+    return commande_controller.delete_commande(db, commande)

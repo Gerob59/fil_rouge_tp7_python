@@ -1,45 +1,49 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter, Depends
+from sqlalchemy.orm import Session
 from ..models import Role
 from ..controllers import role_controller
-from config.db import open_session
-from .router import get_router
+from config.db import get_db
 
-router = get_router()
-session = open_session()
+router = APIRouter()
 
 
-@router.get("/{role_id}")
-def get_role(role_id: int):
-    role = role_controller.get_role(session, role_id)
+@router.get("/{role_id}", response_model=Role)
+def get_role(role_id: int, db: Session = Depends(get_db)):
+    role = role_controller.get_role(db, role_id)
     if not role:
         raise HTTPException(status_code=404, detail="Role not found")
     return role
 
 
-@router.post("/")
-def create_role(role: Role):
-    return role_controller.create_role(session, role)
+@router.get("/", response_model=list[Role])
+def get_all_roles(db: Session = Depends(get_db)):
+    return role_controller.get_all_roles(db)
 
 
-@router.put("/{role_id}")
-def update_role(role_id: int, updated_role: Role):
-    role = role_controller.get_role(session, role_id)
+@router.post("/", response_model=Role)
+def create_role(role: Role, db: Session = Depends(get_db)):
+    return role_controller.create_role(db, role)
+
+
+@router.put("/{role_id}", response_model=Role)
+def update_role(role_id: int, updated_role: Role, db: Session = Depends(get_db)):
+    role = role_controller.get_role(db, role_id)
     if not role:
         raise HTTPException(status_code=404, detail="Role not found")
-    return role_controller.update_role(session, role, updated_role)
+    return role_controller.update_role(db, role, updated_role)
 
 
-@router.patch("/{role_id}")
-def update_role(role_id: int, updated_role: Role):
-    role = role_controller.get_role(session, role_id)
+@router.patch("/{role_id}", response_model=Role)
+def update_role(role_id: int, updated_role: Role, db: Session = Depends(get_db)):
+    role = role_controller.get_role(db, role_id)
     if not role:
         raise HTTPException(status_code=404, detail="Role not found")
-    return role_controller.update_role(session, role, updated_role)
+    return role_controller.update_role(db, role, updated_role)
 
 
-@router.delete("/{role_id}")
-def delete_role(role_id: int):
-    role = role_controller.get_role(session, role_id)
+@router.delete("/{role_id}", response_model=dict)
+def delete_role(role_id: int, db: Session = Depends(get_db)):
+    role = role_controller.get_role(db, role_id)
     if not role:
         raise HTTPException(status_code=404, detail="Role not found")
-    return role_controller.delete_role(session, role)
+    return role_controller.delete_role(db, role)

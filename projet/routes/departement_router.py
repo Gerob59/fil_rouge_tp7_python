@@ -1,45 +1,49 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter, Depends
+from sqlalchemy.orm import Session
 from ..models import Departement
 from ..controllers import departement_controller
-from config.db import open_session
-from .router import get_router
+from config.db import get_db
 
-router = get_router()
-session = open_session()
+router = APIRouter()
 
 
-@router.get("/{code_dept}")
-def get_departement(code_dept: str):
-    departement = departement_controller.get_departement(session, code_dept)
+@router.get("/{code_dept}", response_model=Departement)
+def get_departement(code_dept: str, db: Session = Depends(get_db)):
+    departement = departement_controller.get_departement(db, code_dept)
     if not departement:
         raise HTTPException(status_code=404, detail="Departement not found")
     return departement
 
 
-@router.post("/")
-def create_departement(departement: Departement):
-    return departement_controller.create_departement(session, departement)
+@router.get("/", response_model=list[Departement])
+def get_all_departements(db: Session = Depends(get_db)):
+    return departement_controller.get_all_departements(db)
 
 
-@router.put("/{code_dept}")
-def update_departement(code_dept: str, updated_departement: Departement):
-    departement = departement_controller.get_departement(session, code_dept)
+@router.post("/", response_model=Departement)
+def create_departement(departement: Departement, db: Session = Depends(get_db)):
+    return departement_controller.create_departement(db, departement)
+
+
+@router.put("/{code_dept}", response_model=Departement)
+def update_departement(code_dept: str, updated_departement: Departement, db: Session = Depends(get_db)):
+    departement = departement_controller.get_departement(db, code_dept)
     if not departement:
         raise HTTPException(status_code=404, detail="Departement not found")
-    return departement_controller.update_departement(session, departement, updated_departement)
+    return departement_controller.update_departement(db, departement, updated_departement)
 
 
-@router.patch("/{code_dept}")
-def update_departement(code_dept: str, updated_departement: Departement):
-    departement = departement_controller.get_departement(session, code_dept)
+@router.patch("/{code_dept}", response_model=Departement)
+def update_departement(code_dept: str, updated_departement: Departement, db: Session = Depends(get_db)):
+    departement = departement_controller.get_departement(db, code_dept)
     if not departement:
         raise HTTPException(status_code=404, detail="Departement not found")
-    return departement_controller.update_departement(session, departement, updated_departement)
+    return departement_controller.update_departement(db, departement, updated_departement)
 
 
-@router.delete("/{code_dept}")
-def delete_departement(code_dept: str):
-    departement = departement_controller.get_departement(session, code_dept)
+@router.delete("/{code_dept}", response_model=dict)
+def delete_departement(code_dept: str, db: Session = Depends(get_db)):
+    departement = departement_controller.get_departement(db, code_dept)
     if not departement:
         raise HTTPException(status_code=404, detail="Departement not found")
-    return departement_controller.delete_departement(session, departement)
+    return departement_controller.delete_departement(db, departement)

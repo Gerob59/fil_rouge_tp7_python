@@ -1,45 +1,49 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter, Depends
+from sqlalchemy.orm import Session
 from ..models import Conditionnement
 from ..controllers import conditionnement_controller
-from config.db import open_session
-from .router import get_router
+from config.db import get_db
 
-router = get_router()
-session = open_session()
+router = APIRouter()
 
 
-@router.get("/{conditionnement_id}")
-def get_conditionnement(conditionnement_id: int):
-    conditionnement = conditionnement_controller.get_conditionnement(session, conditionnement_id)
+@router.get("/{conditionnement_id}", response_model=Conditionnement)
+def get_conditionnement(conditionnement_id: int, db: Session = Depends(get_db)):
+    conditionnement = conditionnement_controller.get_conditionnement(db, conditionnement_id)
     if not conditionnement:
         raise HTTPException(status_code=404, detail="Conditionnement not found")
     return conditionnement
 
 
-@router.post("/")
-def create_conditionnement(conditionnement: Conditionnement):
-    return conditionnement_controller.create_conditionnement(session, conditionnement)
+@router.get("/", response_model=list[Conditionnement])
+def get_all_conditionnements(db: Session = Depends(get_db)):
+    return conditionnement_controller.get_all_conditionnements(db)
 
 
-@router.put("/{conditionnement_id}")
-def update_conditionnement(conditionnement_id: int, updated_conditionnement: Conditionnement):
-    conditionnement = conditionnement_controller.get_conditionnement(session, conditionnement_id)
+@router.post("/", response_model=Conditionnement)
+def create_conditionnement(conditionnement: Conditionnement, db: Session = Depends(get_db)):
+    return conditionnement_controller.create_conditionnement(db, conditionnement)
+
+
+@router.put("/{conditionnement_id}", response_model=Conditionnement)
+def update_conditionnement(conditionnement_id: int, updated_conditionnement: Conditionnement, db: Session = Depends(get_db)):
+    conditionnement = conditionnement_controller.get_conditionnement(db, conditionnement_id)
     if not conditionnement:
         raise HTTPException(status_code=404, detail="Conditionnement not found")
-    return conditionnement_controller.update_conditionnement(session, conditionnement, updated_conditionnement)
+    return conditionnement_controller.update_conditionnement(db, conditionnement, updated_conditionnement)
 
 
-@router.patch("/{conditionnement_id}")
-def update_conditionnement(conditionnement_id: int, updated_conditionnement: Conditionnement):
-    conditionnement = conditionnement_controller.get_conditionnement(session, conditionnement_id)
+@router.patch("/{conditionnement_id}", response_model=Conditionnement)
+def update_conditionnement(conditionnement_id: int, updated_conditionnement: Conditionnement, db: Session = Depends(get_db)):
+    conditionnement = conditionnement_controller.get_conditionnement(db, conditionnement_id)
     if not conditionnement:
         raise HTTPException(status_code=404, detail="Conditionnement not found")
-    return conditionnement_controller.update_conditionnement(session, conditionnement, updated_conditionnement)
+    return conditionnement_controller.update_conditionnement(db, conditionnement, updated_conditionnement)
 
 
-@router.delete("/{conditionnement_id}")
-def delete_conditionnement(conditionnement_id: int):
-    conditionnement = conditionnement_controller.get_conditionnement(session, conditionnement_id)
+@router.delete("/{conditionnement_id}", response_model=dict)
+def delete_conditionnement(conditionnement_id: int, db: Session = Depends(get_db)):
+    conditionnement = conditionnement_controller.get_conditionnement(db, conditionnement_id)
     if not conditionnement:
         raise HTTPException(status_code=404, detail="Conditionnement not found")
-    return conditionnement_controller.delete_conditionnement(session, conditionnement)
+    return conditionnement_controller.delete_conditionnement(db, conditionnement)

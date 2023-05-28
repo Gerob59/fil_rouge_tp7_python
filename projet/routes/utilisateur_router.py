@@ -1,45 +1,49 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter, Depends
+from sqlalchemy.orm import Session
 from ..models import Utilisateur
 from ..controllers import utilisateur_controller
-from config.db import open_session
-from .router import get_router
+from config.db import get_db
 
-router = get_router()
-session = open_session()
+router = APIRouter()
 
 
-@router.get("/{utilisateur_id}")
-def get_utilisateur(utilisateur_id: int):
-    utilisateur = utilisateur_controller.get_utilisateur(session, utilisateur_id)
+@router.get("/{utilisateur_id}", response_model=Utilisateur)
+def get_utilisateur(utilisateur_id: int, db: Session = Depends(get_db)):
+    utilisateur = utilisateur_controller.get_utilisateur(db, utilisateur_id)
     if not utilisateur:
         raise HTTPException(status_code=404, detail="Utilisateur not found")
     return utilisateur
 
 
-@router.post("/")
-def create_utilisateur(utilisateur: Utilisateur):
-    return utilisateur_controller.create_utilisateur(session, utilisateur)
+@router.get("/", response_model=list[Utilisateur])
+def get_all_utilisateurs(db: Session = Depends(get_db)):
+    return utilisateur_controller.get_all_utilisateurs(db)
 
 
-@router.put("/{utilisateur_id}")
-def update_utilisateur(utilisateur_id: int, updated_utilisateur: Utilisateur):
-    utilisateur = utilisateur_controller.get_utilisateur(session, utilisateur_id)
+@router.post("/", response_model=Utilisateur)
+def create_utilisateur(utilisateur: Utilisateur, db: Session = Depends(get_db)):
+    return utilisateur_controller.create_utilisateur(db, utilisateur)
+
+
+@router.put("/{utilisateur_id}", response_model=Utilisateur)
+def update_utilisateur(utilisateur_id: int, updated_utilisateur: Utilisateur, db: Session = Depends(get_db)):
+    utilisateur = utilisateur_controller.get_utilisateur(db, utilisateur_id)
     if not utilisateur:
         raise HTTPException(status_code=404, detail="Utilisateur not found")
-    return utilisateur_controller.update_utilisateur(session, utilisateur, updated_utilisateur)
+    return utilisateur_controller.update_utilisateur(db, utilisateur, updated_utilisateur)
 
 
-@router.patch("/{utilisateur_id}")
-def update_utilisateur(utilisateur_id: int, updated_utilisateur: Utilisateur):
-    utilisateur = utilisateur_controller.get_utilisateur(session, utilisateur_id)
+@router.patch("/{utilisateur_id}", response_model=Utilisateur)
+def update_utilisateur(utilisateur_id: int, updated_utilisateur: Utilisateur, db: Session = Depends(get_db)):
+    utilisateur = utilisateur_controller.get_utilisateur(db, utilisateur_id)
     if not utilisateur:
         raise HTTPException(status_code=404, detail="Utilisateur not found")
-    return utilisateur_controller.update_utilisateur(session, utilisateur, updated_utilisateur)
+    return utilisateur_controller.update_utilisateur(db, utilisateur, updated_utilisateur)
 
 
-@router.delete("/{utilisateur_id}")
-def delete_utilisateur(utilisateur_id: int):
-    utilisateur = utilisateur_controller.get_utilisateur(session, utilisateur_id)
+@router.delete("/{utilisateur_id}", response_model=dict)
+def delete_utilisateur(utilisateur_id: int, db: Session = Depends(get_db)):
+    utilisateur = utilisateur_controller.get_utilisateur(db, utilisateur_id)
     if not utilisateur:
         raise HTTPException(status_code=404, detail="Utilisateur not found")
-    return utilisateur_controller.delete_utilisateur(session, utilisateur)
+    return utilisateur_controller.delete_utilisateur(db, utilisateur)

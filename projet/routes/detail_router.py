@@ -1,45 +1,49 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter, Depends
+from sqlalchemy.orm import Session
 from ..models import Detail
 from ..controllers import detail_controller
-from config.db import open_session
-from .router import get_router
+from config.db import get_db
 
-router = get_router()
-session = open_session()
+router = APIRouter()
 
 
-@router.get("/{detail_id}")
-def get_detail(detail_id: int):
-    detail = detail_controller.get_detail(session, detail_id)
+@router.get("/{detail_id}", response_model=Detail)
+def get_detail(detail_id: int, db: Session = Depends(get_db)):
+    detail = detail_controller.get_detail(db, detail_id)
     if not detail:
         raise HTTPException(status_code=404, detail="Detail not found")
     return detail
 
 
-@router.post("/")
-def create_detail(detail: Detail):
-    return detail_controller.create_detail(session, detail)
+@router.get("/", response_model=list[Detail])
+def get_all_details(db: Session = Depends(get_db)):
+    return detail_controller.get_all_details(db)
 
 
-@router.put("/{detail_id}")
-def update_detail(detail_id: int, updated_detail: Detail):
-    detail = detail_controller.get_detail(session, detail_id)
+@router.post("/", response_model=Detail)
+def create_detail(detail: Detail, db: Session = Depends(get_db)):
+    return detail_controller.create_detail(db, detail)
+
+
+@router.put("/{detail_id}", response_model=Detail)
+def update_detail(detail_id: int, updated_detail: Detail, db: Session = Depends(get_db)):
+    detail = detail_controller.get_detail(db, detail_id)
     if not detail:
         raise HTTPException(status_code=404, detail="Detail not found")
-    return detail_controller.update_detail(session, detail, updated_detail)
+    return detail_controller.update_detail(db, detail, updated_detail)
 
 
-@router.patch("/{detail_id}")
-def update_detail(detail_id: int, updated_detail: Detail):
-    detail = detail_controller.get_detail(session, detail_id)
+@router.patch("/{detail_id}", response_model=Detail)
+def update_detail(detail_id: int, updated_detail: Detail, db: Session = Depends(get_db)):
+    detail = detail_controller.get_detail(db, detail_id)
     if not detail:
         raise HTTPException(status_code=404, detail="Detail not found")
-    return detail_controller.update_detail(session, detail, updated_detail)
+    return detail_controller.update_detail(db, detail, updated_detail)
 
 
-@router.delete("/{detail_id}")
-def delete_detail(detail_id: int):
-    detail = detail_controller.get_detail(session, detail_id)
+@router.delete("/{detail_id}", response_model=dict)
+def delete_detail(detail_id: int, db: Session = Depends(get_db)):
+    detail = detail_controller.get_detail(db, detail_id)
     if not detail:
         raise HTTPException(status_code=404, detail="Detail not found")
-    return detail_controller.delete_detail(session, detail)
+    return detail_controller.delete_detail(db, detail)

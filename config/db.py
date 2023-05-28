@@ -13,6 +13,7 @@ DATABASE = {
 
 # Création de l'URL de connexion à la base de données
 DB_URL = f"{DATABASE['drivername']}://{DATABASE['username']}:{DATABASE['password']}@{DATABASE['host']}:{DATABASE['port']}/{DATABASE['database']}"
+# DB_URL = "mysql+pymysql://root@localhost/fromagerie"
 
 # Déclaration de la classe de base pour les modèles
 Base = declarative_base()
@@ -24,23 +25,14 @@ engine = create_engine(DB_URL)
 Session = sessionmaker(bind=engine)
 
 
-def initialize_database():
+def initialize_database() -> None:
     # Création des tables dans la base de données
     Base.metadata.create_all(engine)
-    # Autres opérations d'initialisation si nécessaire
 
 
-def configure_database():
-    # Configuration spécifique de la base de données
-    # Exemple : Activer l'autocommit
-    engine.connect().execution_options(autocommit=True)
-    # Autres configurations si nécessaire
-
-
-def open_session():
-    session = Session()
-    return session
-
-
-def close_session(session):
-    session.close()
+def get_db() -> Session:
+    db = Session()
+    try:
+        yield db
+    finally:
+        db.close()

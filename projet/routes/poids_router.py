@@ -1,45 +1,49 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter, Depends
+from sqlalchemy.orm import Session
 from ..models import Poids
 from ..controllers import poids_controller
-from config.db import open_session
-from .router import get_router
+from config.db import get_db
 
-router = get_router()
-session = open_session()
+router = APIRouter()
 
 
-@router.get("/{poids_id}")
-def get_poids(poids_id: int):
-    poids = poids_controller.get_poids(session, poids_id)
+@router.get("/{poids_id}", response_model=Poids)
+def get_poids(poids_id: int, db: Session = Depends(get_db)):
+    poids = poids_controller.get_poids(db, poids_id)
     if not poids:
         raise HTTPException(status_code=404, detail="Poids not found")
     return poids
 
 
-@router.post("/")
-def create_poids(poids: Poids):
-    return poids_controller.create_poids(session, poids)
+@router.get("/", response_model=list[Poids])
+def get_all_poids(db: Session = Depends(get_db)):
+    return poids_controller.get_all_poids(db)
 
 
-@router.put("/{poids_id}")
-def update_poids(poids_id: int, updated_poids: Poids):
-    poids = poids_controller.get_poids(session, poids_id)
+@router.post("/", response_model=Poids)
+def create_poids(poids: Poids, db: Session = Depends(get_db)):
+    return poids_controller.create_poids(db, poids)
+
+
+@router.put("/{poids_id}", response_model=Poids)
+def update_poids(poids_id: int, updated_poids: Poids, db: Session = Depends(get_db)):
+    poids = poids_controller.get_poids(db, poids_id)
     if not poids:
         raise HTTPException(status_code=404, detail="Poids not found")
-    return poids_controller.update_poids(session, poids, updated_poids)
+    return poids_controller.update_poids(db, poids, updated_poids)
 
 
-@router.patch("/{poids_id}")
-def update_poids(poids_id: int, updated_poids: Poids):
-    poids = poids_controller.get_poids(session, poids_id)
+@router.patch("/{poids_id}", response_model=Poids)
+def update_poids(poids_id: int, updated_poids: Poids, db: Session = Depends(get_db)):
+    poids = poids_controller.get_poids(db, poids_id)
     if not poids:
         raise HTTPException(status_code=404, detail="Poids not found")
-    return poids_controller.update_poids(session, poids, updated_poids)
+    return poids_controller.update_poids(db, poids, updated_poids)
 
 
-@router.delete("/{poids_id}")
-def delete_poids(poids_id: int):
-    poids = poids_controller.get_poids(session, poids_id)
+@router.delete("/{poids_id}", response_model=dict)
+def delete_poids(poids_id: int, db: Session = Depends(get_db)):
+    poids = poids_controller.get_poids(db, poids_id)
     if not poids:
         raise HTTPException(status_code=404, detail="Poids not found")
-    return poids_controller.delete_poids(session, poids)
+    return poids_controller.delete_poids(db, poids)
