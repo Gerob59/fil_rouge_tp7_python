@@ -29,6 +29,14 @@ def update_utilisateur(utilisateur_id: int, updated_utilisateur: Utilisateur):
     return utilisateur_controller.update_utilisateur(session, utilisateur, updated_utilisateur)
 
 
+@router.patch("/{utilisateur_id}")
+def update_utilisateur(utilisateur_id: int, updated_utilisateur: Utilisateur):
+    utilisateur = utilisateur_controller.get_utilisateur(session, utilisateur_id)
+    if not utilisateur:
+        raise HTTPException(status_code=404, detail="Utilisateur not found")
+    return utilisateur_controller.update_utilisateur(session, utilisateur, updated_utilisateur)
+
+
 @router.delete("/{utilisateur_id}")
 def delete_utilisateur(utilisateur_id: int):
     utilisateur = utilisateur_controller.get_utilisateur(session, utilisateur_id)

@@ -29,6 +29,14 @@ def update_objet(objet_id: int, updated_objet: Objet):
     return objet_controller.update_objet(session, objet, updated_objet)
 
 
+@router.patch("/{objet_id}")
+def update_objet(objet_id: int, updated_objet: Objet):
+    objet = objet_controller.get_objet(session, objet_id)
+    if not objet:
+        raise HTTPException(status_code=404, detail="Objet not found")
+    return objet_controller.update_objet(session, objet, updated_objet)
+
+
 @router.delete("/{objet_id}")
 def delete_objet(objet_id: int):
     objet = objet_controller.get_objet(session, objet_id)

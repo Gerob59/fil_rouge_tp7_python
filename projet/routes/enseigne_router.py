@@ -29,6 +29,14 @@ def update_enseigne(enseigne_id: int, updated_enseigne: Enseigne):
     return enseigne_controller.update_enseigne(session, enseigne, updated_enseigne)
 
 
+@router.patch("/{enseigne_id}")
+def update_enseigne(enseigne_id: int, updated_enseigne: Enseigne):
+    enseigne = enseigne_controller.get_enseigne(session, enseigne_id)
+    if not enseigne:
+        raise HTTPException(status_code=404, detail="Enseigne not found")
+    return enseigne_controller.update_enseigne(session, enseigne, updated_enseigne)
+
+
 @router.delete("/{enseigne_id}")
 def delete_enseigne(enseigne_id: int):
     enseigne = enseigne_controller.get_enseigne(session, enseigne_id)

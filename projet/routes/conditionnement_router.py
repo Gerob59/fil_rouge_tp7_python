@@ -29,6 +29,14 @@ def update_conditionnement(conditionnement_id: int, updated_conditionnement: Con
     return conditionnement_controller.update_conditionnement(session, conditionnement, updated_conditionnement)
 
 
+@router.patch("/{conditionnement_id}")
+def update_conditionnement(conditionnement_id: int, updated_conditionnement: Conditionnement):
+    conditionnement = conditionnement_controller.get_conditionnement(session, conditionnement_id)
+    if not conditionnement:
+        raise HTTPException(status_code=404, detail="Conditionnement not found")
+    return conditionnement_controller.update_conditionnement(session, conditionnement, updated_conditionnement)
+
+
 @router.delete("/{conditionnement_id}")
 def delete_conditionnement(conditionnement_id: int):
     conditionnement = conditionnement_controller.get_conditionnement(session, conditionnement_id)

@@ -29,6 +29,14 @@ def update_poids(poids_id: int, updated_poids: Poids):
     return poids_controller.update_poids(session, poids, updated_poids)
 
 
+@router.patch("/{poids_id}")
+def update_poids(poids_id: int, updated_poids: Poids):
+    poids = poids_controller.get_poids(session, poids_id)
+    if not poids:
+        raise HTTPException(status_code=404, detail="Poids not found")
+    return poids_controller.update_poids(session, poids, updated_poids)
+
+
 @router.delete("/{poids_id}")
 def delete_poids(poids_id: int):
     poids = poids_controller.get_poids(session, poids_id)

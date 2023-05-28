@@ -29,6 +29,14 @@ def update_vignette(vignette_id: int, updated_vignette: Vignette):
     return vignette_controller.update_vignette(session, vignette, updated_vignette)
 
 
+@router.patch("/{vignette_id}")
+def update_vignette(vignette_id: int, updated_vignette: Vignette):
+    vignette = vignette_controller.get_vignette(session, vignette_id)
+    if not vignette:
+        raise HTTPException(status_code=404, detail="Vignette not found")
+    return vignette_controller.update_vignette(session, vignette, updated_vignette)
+
+
 @router.delete("/{vignette_id}")
 def delete_vignette(vignette_id: int):
     vignette = vignette_controller.get_vignette(session, vignette_id)

@@ -29,6 +29,14 @@ def update_role_utilisateur(role_utilisateur_id: int, updated_role_utilisateur: 
     return role_utilisateur_controller.update_role_utilisateur(session, role_utilisateur, updated_role_utilisateur)
 
 
+@router.patch("/{role_utilisateur_id}")
+def update_role_utilisateur(role_utilisateur_id: int, updated_role_utilisateur: RoleUtilisateur):
+    role_utilisateur = role_utilisateur_controller.get_role_utilisateur(session, role_utilisateur_id)
+    if not role_utilisateur:
+        raise HTTPException(status_code=404, detail="RoleUtilisateur not found")
+    return role_utilisateur_controller.update_role_utilisateur(session, role_utilisateur, updated_role_utilisateur)
+
+
 @router.delete("/{role_utilisateur_id}")
 def delete_role_utilisateur(role_utilisateur_id: int):
     role_utilisateur = role_utilisateur_controller.get_role_utilisateur(session, role_utilisateur_id)

@@ -30,6 +30,14 @@ def update_commande(commande_id: int, updated_commande: Commande):
     return commande_controller.update_commande(session, commande, updated_commande)
 
 
+@router.patch("/{commande_id}")
+def update_commande(commande_id: int, updated_commande: Commande):
+    commande = commande_controller.get_commande(session, commande_id)
+    if not commande:
+        raise HTTPException(status_code=404, detail="Commande not found")
+    return commande_controller.update_commande(session, commande, updated_commande)
+
+
 @router.delete("/{commande_id}")
 def delete_commande(commande_id: int):
     commande = commande_controller.get_commande(session, commande_id)
