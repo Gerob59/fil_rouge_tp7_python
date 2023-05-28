@@ -1,9 +1,17 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
 from ..models import Commune
 
 
 def get_commune(db: Session, commune_id: int):
-    return db.query(Commune).get(commune_id)
+    commune = db.query(Commune).get(commune_id)
+    if not commune:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Commune not found")
+    return commune
+
+
+def get_all_communes(db: Session):
+    return db.query(Commune).all()
 
 
 def create_commune(db: Session, commune: Commune):
@@ -13,15 +21,22 @@ def create_commune(db: Session, commune: Commune):
     return commune
 
 
-def update_commune(db: Session, commune: Commune, updated_commune: Commune):
-    for attr, value in updated_commune.dict().items():
+def update_commune(db: Session, commune_id: int, updated_commune: Commune):
+    commune = db.query(Commune).get(commune_id)
+    if not commune:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Commune not found")
+    updated_data = updated_commune.dict(exclude_unset=True)
+    for attr, value in updated_data.items():
         setattr(commune, attr, value)
     db.commit()
     db.refresh(commune)
     return commune
 
 
-def delete_commune(db: Session, commune: Commune):
+def delete_commune(db: Session, commune_id: int):
+    commune = db.query(Commune).get(commune_id)
+    if not commune:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Commune not found")
     db.delete(commune)
     db.commit()
     return {"message": "Commune deleted"}
