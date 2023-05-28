@@ -21,4 +21,3 @@ def bind_engine():
 
     # Lier la session avec le moteur
     Session.configure(bind=engine)
-

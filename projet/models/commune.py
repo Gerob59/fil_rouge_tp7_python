@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Integer, Index, ForeignKey
-from config.sqlalchemy import Base
+from config.db import Base
 
 
 class Commune(Base):

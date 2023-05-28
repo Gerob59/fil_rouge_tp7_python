@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Integer
-from config.sqlalchemy import Base
+from config.db import Base
 
 
 class Departement(Base):

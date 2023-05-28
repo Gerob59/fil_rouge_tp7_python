@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, Numeric
-from config.sqlalchemy import Base
+from config.db import Base
 
 
 class Vignette(Base):

@@ -1,5 +1,4 @@
-
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from . import (
     commune_router,
     client_router,
@@ -18,14 +17,13 @@ from . import (
     vignette_router,
 )
 
-app = FastAPI()
-
 
 def get_router():
-    return app
+    return APIRouter()
 
 
 def get_routes():
+    app = FastAPI()
     app.include_router(commune_router.router, prefix="/communes", tags=["Communes"])
     app.include_router(client_router.router, prefix="/clients", tags=["Clients"])
     app.include_router(commande_router.router, prefix="/commandes", tags=["Commandes"])
@@ -41,3 +39,4 @@ def get_routes():
     app.include_router(role_utilisateur_router.router, prefix="/role_utilisateurs", tags=["Role Utilisateurs"])
     app.include_router(utilisateur_router.router, prefix="/utilisateurs", tags=["Utilisateurs"])
     app.include_router(vignette_router.router, prefix="/vignettes", tags=["Vignettes"])
+    return app

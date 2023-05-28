@@ -1,3 +1,8 @@
-from config.sqlalchemy import bind_engine
+from fastapi import FastAPI
+from .routes import get_routes
 
-bind_engine()
+app: FastAPI = get_routes()
+
+
+# from config.sqlalchemy import bind_engine
+# bind_engine()
