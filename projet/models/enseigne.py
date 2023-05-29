@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from config.sqlalchemy import Base
+from config.db import Base
 
 
 class Enseigne(Base):
