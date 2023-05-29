@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import ObjetCond
+from ..schemas import ObjetCondSchema
 
 
 def get_objet_cond(db: Session, objet_cond_id: int):
@@ -14,14 +15,14 @@ def get_all_objet_cond(db: Session):
     return db.query(ObjetCond).all()
 
 
-def create_objet_cond(db: Session, objet_cond: ObjetCond):
+def create_objet_cond(db: Session, objet_cond: ObjetCondSchema):
     db.add(objet_cond)
     db.commit()
     db.refresh(objet_cond)
     return objet_cond
 
 
-def update_objet_cond(db: Session, objet_cond_id: ObjetCond, updated_objet_cond: ObjetCond):
+def update_objet_cond(db: Session, objet_cond_id: int, updated_objet_cond: ObjetCondSchema):
     objet_cond = db.query(ObjetCond).get(objet_cond_id)
     if not objet_cond:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ObjetCond not found")

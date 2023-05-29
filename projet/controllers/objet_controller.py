@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import Objet
+from ..schemas import ObjetSchema
 
 
 def get_objet(db: Session, objet_id: int):
@@ -14,14 +15,14 @@ def get_all_objets(db: Session):
     return db.query(Objet).all()
 
 
-def create_objet(db: Session, objet: Objet):
+def create_objet(db: Session, objet: ObjetSchema):
     db.add(objet)
     db.commit()
     db.refresh(objet)
     return objet
 
 
-def update_objet(db: Session, objet_id: int, updated_objet: Objet):
+def update_objet(db: Session, objet_id: int, updated_objet: ObjetSchema):
     objet = db.query(Objet).get(objet_id)
     if not objet:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Objet not found")

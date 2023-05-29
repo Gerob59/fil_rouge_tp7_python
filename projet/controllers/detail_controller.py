@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import Detail
+from ..schemas import DetailSchema
 
 
 def get_detail(db: Session, detail_id: int):
@@ -14,14 +15,14 @@ def get_all_details(db: Session):
     return db.query(Detail).all()
 
 
-def create_detail(db: Session, detail: Detail):
+def create_detail(db: Session, detail: DetailSchema):
     db.add(detail)
     db.commit()
     db.refresh(detail)
     return detail
 
 
-def update_detail(db: Session, detail_id: int, updated_detail: Detail):
+def update_detail(db: Session, detail_id: int, updated_detail: DetailSchema):
     detail = db.query(Detail).get(detail_id)
     if not detail:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Detail not found")

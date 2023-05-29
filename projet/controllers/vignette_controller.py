@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import Vignette
+from ..schemas import VignetteSchema
 
 
 def get_vignette(db: Session, vignette_id: int):
@@ -14,14 +15,14 @@ def get_all_vignettes(db: Session):
     return db.query(Vignette).all()
 
 
-def create_vignette(db: Session, vignette: Vignette):
+def create_vignette(db: Session, vignette: VignetteSchema):
     db.add(vignette)
     db.commit()
     db.refresh(vignette)
     return vignette
 
 
-def update_vignette(db: Session, vignette_id: int, updated_vignette: Vignette):
+def update_vignette(db: Session, vignette_id: int, updated_vignette: VignetteSchema):
     vignette = db.query(Vignette).get(vignette_id)
     if not vignette:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vignette not found")

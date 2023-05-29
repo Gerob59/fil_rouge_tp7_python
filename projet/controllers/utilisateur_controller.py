@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import Utilisateur
+from ..schemas import UtilisateurSchema
 
 
 def get_utilisateur(db: Session, utilisateur_id: int):
@@ -14,14 +15,14 @@ def get_all_utilisateurs(db: Session):
     return db.query(Utilisateur).all()
 
 
-def create_utilisateur(db: Session, utilisateur: Utilisateur):
+def create_utilisateur(db: Session, utilisateur: UtilisateurSchema):
     db.add(utilisateur)
     db.commit()
     db.refresh(utilisateur)
     return utilisateur
 
 
-def update_utilisateur(db: Session, utilisateur_id: int, updated_utilisateur: Utilisateur):
+def update_utilisateur(db: Session, utilisateur_id: int, updated_utilisateur: UtilisateurSchema):
     utilisateur = db.query(Utilisateur).get(utilisateur_id)
     if not utilisateur:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Utilisateur not found")

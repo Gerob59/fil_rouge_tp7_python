@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import Client
+from ..schemas import ClientSchema
 
 
 def get_client(db: Session, client_id: int):
@@ -14,14 +15,14 @@ def get_all_clients(db: Session):
     return db.query(Client).all()
 
 
-def create_client(db: Session, client: Client):
+def create_client(db: Session, client: ClientSchema):
     db.add(client)
     db.commit()
     db.refresh(client)
     return client
 
 
-def update_client(db: Session, client_id: int, updated_client: Client):
+def update_client(db: Session, client_id: int, updated_client: ClientSchema):
     client = db.query(Client).get(client_id)
     if not client:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")

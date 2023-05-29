@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import Role
+from ..schemas import RoleSchema
 
 
 def get_role(db: Session, role_id: int):
@@ -14,14 +15,14 @@ def get_all_roles(db: Session):
     return db.query(Role).all()
 
 
-def create_role(db: Session, role: Role):
+def create_role(db: Session, role: RoleSchema):
     db.add(role)
     db.commit()
     db.refresh(role)
     return role
 
 
-def update_role(db: Session, role_id: int, updated_role: Role):
+def update_role(db: Session, role_id: int, updated_role: RoleSchema):
     role = db.query(Role).get(role_id)
     if not role:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Role not found")

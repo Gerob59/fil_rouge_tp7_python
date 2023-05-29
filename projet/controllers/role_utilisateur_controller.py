@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import RoleUtilisateur
+from ..schemas import RoleUtilisateurSchema
 
 
 def get_role_utilisateur(db: Session, role_utilisateur_id: int):
@@ -14,14 +15,14 @@ def get_all_role_utilisateurs(db: Session):
     return db.query(RoleUtilisateur).all()
 
 
-def create_role_utilisateur(db: Session, role_utilisateur: RoleUtilisateur):
+def create_role_utilisateur(db: Session, role_utilisateur: RoleUtilisateurSchema):
     db.add(role_utilisateur)
     db.commit()
     db.refresh(role_utilisateur)
     return role_utilisateur
 
 
-def update_role_utilisateur(db: Session, role_utilisateur_id: int, updated_role_utilisateur: RoleUtilisateur):
+def update_role_utilisateur(db: Session, role_utilisateur_id: int, updated_role_utilisateur: RoleUtilisateurSchema):
     role_utilisateur = db.query(RoleUtilisateur).get(role_utilisateur_id)
     if not role_utilisateur:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="RoleUtilisateur not found")

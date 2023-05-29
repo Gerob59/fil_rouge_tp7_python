@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import Commande
+from ..schemas import CommandeSchema
 
 
 def get_commande(db: Session, commande_id: int):
@@ -14,14 +15,14 @@ def get_all_commandes(db: Session):
     return db.query(Commande).all()
 
 
-def create_commande(db: Session, commande: Commande):
+def create_commande(db: Session, commande: CommandeSchema):
     db.add(commande)
     db.commit()
     db.refresh(commande)
     return commande
 
 
-def update_commande(db: Session, commande_id: int, updated_commande: Commande):
+def update_commande(db: Session, commande_id: int, updated_commande: CommandeSchema):
     commande = db.query(Commande).get(commande_id)
     if not commande:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Commande not found")
