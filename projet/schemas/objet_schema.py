@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from pydantic.types import constr, PositiveInt, confloat
+from pydantic.types import constr, PositiveInt, confloat, conint
 
 
 class ObjetSchema(BaseModel):
@@ -8,12 +8,12 @@ class ObjetSchema(BaseModel):
     tailleobj: constr(max_length=50) = None
     puobj: confloat(gt=0) = 0.0000
     poidsobj: confloat(gt=0) = 0.0000
-    indispobj: PositiveInt = 0
-    o_imp: PositiveInt = 0
-    o_aff: PositiveInt = 0
-    o_cartp: PositiveInt = 0
-    points: PositiveInt = 0
-    o_ordre_aff: PositiveInt = 0
+    indispobj: conint(ge=0) = 0
+    o_imp: conint(ge=0) = 0
+    o_aff: conint(ge=0) = 0
+    o_cartp: conint(ge=0) = 0
+    points: conint(ge=0) = 0
+    o_ordre_aff: conint(ge=0) = 0
 
     class Config:
         orm_mode = True

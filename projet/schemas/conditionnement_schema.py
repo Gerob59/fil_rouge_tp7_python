@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from pydantic.types import constr, PositiveInt, confloat
+from pydantic.types import constr, PositiveInt, confloat, conint
 
 
 class ConditionnementSchema(BaseModel):
@@ -7,7 +7,7 @@ class ConditionnementSchema(BaseModel):
     libcondit: constr(max_length=50) = None
     poidscondit: PositiveInt
     prixcond: confloat(gt=0) = 0.0000
-    ordreimp: PositiveInt
+    ordreimp: conint(ge=0)
 
     class Config:
         orm_mode = True
