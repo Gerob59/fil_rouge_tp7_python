@@ -11,7 +11,7 @@ router = APIRouter()
 def get_departement(code_dept: str, db: Session = Depends(get_db)):
     departement = departement_controller.get_departement(db, code_dept)
     if not departement:
-        raise HTTPException(status_code=404, detail="Departement not found")
+        raise HTTPException(status_code=404, detail=f"Departement {code_dept} not found")
     return departement
 
 
@@ -29,21 +29,21 @@ def create_departement(departement: DepartementSchema, db: Session = Depends(get
 def update_departement(code_dept: str, updated_departement: DepartementSchema, db: Session = Depends(get_db)):
     departement = departement_controller.get_departement(db, code_dept)
     if not departement:
-        raise HTTPException(status_code=404, detail="Departement not found")
-    return departement_controller.update_departement(db, departement, updated_departement)
+        raise HTTPException(status_code=404, detail=f"Departement {code_dept} not found")
+    return departement_controller.update_departement(db, code_dept, updated_departement)
 
 
 @router.patch("/{code_dept}", response_model=DepartementSchema)
 def update_departement(code_dept: str, updated_departement: DepartementSchema, db: Session = Depends(get_db)):
     departement = departement_controller.get_departement(db, code_dept)
     if not departement:
-        raise HTTPException(status_code=404, detail="Departement not found")
-    return departement_controller.update_departement(db, departement, updated_departement)
+        raise HTTPException(status_code=404, detail=f"Departement {code_dept} not found")
+    return departement_controller.update_departement(db, code_dept, updated_departement)
 
 
 @router.delete("/{code_dept}", response_model=dict)
 def delete_departement(code_dept: str, db: Session = Depends(get_db)):
     departement = departement_controller.get_departement(db, code_dept)
     if not departement:
-        raise HTTPException(status_code=404, detail="Departement not found")
-    return departement_controller.delete_departement(db, departement)
+        raise HTTPException(status_code=404, detail=f"Departement {code_dept} not found")
+    return departement_controller.delete_departement(db, code_dept)
