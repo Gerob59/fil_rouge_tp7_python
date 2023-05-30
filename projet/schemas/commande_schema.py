@@ -14,3 +14,5 @@ class CommandeSchema(BaseModel):
     cdeComt: str
     barchive: int
     bstock: int
+    class Config:
+        orm_mode = True

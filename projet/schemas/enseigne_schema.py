@@ -6,3 +6,5 @@ class EnseigneSchema(BaseModel):
     lb_enseigne: str
     ville_enseigne: str
     dept_enseigne: int
+    class Config:
+        orm_mode = True

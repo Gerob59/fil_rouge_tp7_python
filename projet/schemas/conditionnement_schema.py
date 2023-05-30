@@ -8,3 +8,5 @@ class ConditionnementSchema(BaseModel):
     prixcond: float
     ordreimp: int
     # objets: List[ObjetSchema]
+    class Config:
+        orm_mode = True

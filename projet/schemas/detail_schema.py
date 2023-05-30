@@ -7,3 +7,5 @@ class DetailSchema(BaseModel):
     qte: int
     colis: int
     commentaire: str
+    class Config:
+        orm_mode = True

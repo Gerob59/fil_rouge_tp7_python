@@ -14,3 +14,6 @@ class ClientSchema(BaseModel):
     emailcli: str
     portcli: str
     newsletter: int
+
+    class Config:
+        orm_mode = True

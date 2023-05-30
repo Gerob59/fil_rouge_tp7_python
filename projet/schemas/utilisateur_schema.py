@@ -9,3 +9,5 @@ class UtilisateurSchema(BaseModel):
     username: str
     couleur_fond_utilisateur: int
     date_insc_utilisateur: datetime
+    class Config:
+        orm_mode = True

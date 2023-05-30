@@ -12,3 +12,5 @@ class ObjetCondSchema(BaseModel):
     codcond: int  # ForeignKey('t_conditionnement.idcondit')
     objets: List[ObjetSchema]  # relationship("Objet", back_populates='condit')
     condit: List[ConditionnementSchema]  # relationship("Conditionnement", back_populates='objets')
+    class Config:
+        orm_mode = True

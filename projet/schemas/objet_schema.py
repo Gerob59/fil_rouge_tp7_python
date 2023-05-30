@@ -14,3 +14,5 @@ class ObjetSchema(BaseModel):
     points: int
     o_ordre_aff: int
     # condit: List[ObjetCondSchema]  # relationship("ObjetCond", back_populates='objets')
+    class Config:
+        orm_mode = True
