@@ -1,9 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, PositiveInt
 
 
 class VignetteSchema(BaseModel):
-    id: int  # PrimaryKey
-    valmin: float
-    valtimbre: float
+    id: PositiveInt
+    valmin: float = 0
+    valtimbre: float = 0
+
     class Config:
         orm_mode = True

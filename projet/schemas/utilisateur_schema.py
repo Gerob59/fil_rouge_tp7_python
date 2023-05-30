@@ -1,13 +1,15 @@
 from datetime import datetime
-from pydantic import BaseModel
+from typing import Optional
+from pydantic import BaseModel, constr, PositiveInt
 
 
 class UtilisateurSchema(BaseModel):
-    code_utilisateur: int  # PrimaryKey
-    nom_utilisateur: str
-    prenom_utilisateur: str
-    username: str
-    couleur_fond_utilisateur: int
-    date_insc_utilisateur: datetime
+    code_utilisateur: PositiveInt
+    nom_utilisateur: constr(max_length=50) = None
+    prenom_utilisateur: constr(max_length=50) = None
+    username: constr(max_length=50) = None
+    couleur_fond_utilisateur: int = 0
+    date_insc_utilisateur: Optional[datetime]
+
     class Config:
         orm_mode = True
