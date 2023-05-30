@@ -35,9 +35,7 @@ def update_departement(db: Session, code_dept: str, updated_departement: Departe
         updated_data = updated_departement.dict(exclude_unset=True)
         for attr, value in updated_data.items():
             if hasattr(departement_db, attr):
-                print("avant setattr", departement_db)
                 setattr(departement_db, attr, value)
-                print("après setattr", departement_db)
         db.commit()
         db.refresh(departement_db)
     return DepartementSchema.from_orm(departement_db)

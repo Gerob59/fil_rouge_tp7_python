@@ -4,40 +4,47 @@ from ..models import Enseigne
 from ..schemas import EnseigneSchema
 
 
-def get_enseigne(db: Session, enseigne_id: int):
-    enseigne = db.query(Enseigne).get(enseigne_id)
-    if not enseigne:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Enseigne not found")
-    return enseigne
+def get_enseigne(db: Session, enseigne_id: int) -> EnseigneSchema:
+    with db:
+        enseigne_db = db.query(Enseigne).get(enseigne_id)
+        if not enseigne_db:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Enseigne not found")
+    return EnseigneSchema.from_orm(enseigne_db)
 
 
-def get_all_enseignes(db: Session):
-    return db.query(Enseigne).all()
+def get_all_enseignes(db: Session) -> [EnseigneSchema]:
+    with db:
+        resultat = db.query(Enseigne).all()
+    return resultat
 
 
-def create_enseigne(db: Session, enseigne: EnseigneSchema):
-    db.add(enseigne)
-    db.commit()
-    db.refresh(enseigne)
-    return enseigne
+def create_enseigne(db: Session, enseigne: EnseigneSchema) -> EnseigneSchema:
+    with db:
+        enseigne_db = Enseigne(**enseigne.dict())
+        db.add(enseigne_db)
+        db.commit()
+        db.refresh(enseigne_db)
+    return EnseigneSchema.from_orm(enseigne_db)
 
 
-def update_enseigne(db: Session, enseigne_id: int, updated_enseigne: EnseigneSchema):
-    enseigne = db.query(Enseigne).get(enseigne_id)
-    if not enseigne:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Enseigne not found")
-    updated_data = updated_enseigne.dict(exclude_unset=True)
-    for attr, value in updated_data.items():
-        setattr(enseigne, attr, value)
-    db.commit()
-    db.refresh(enseigne)
-    return enseigne
+def update_enseigne(db: Session, enseigne_id: int, updated_enseigne: EnseigneSchema) -> EnseigneSchema:
+    with db:
+        enseigne_db = db.query(Enseigne).get(enseigne_id)
+        if not enseigne_db:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Enseigne not found")
+        updated_data = updated_enseigne.dict(exclude_unset=True)
+        for attr, value in updated_data.items():
+            setattr(enseigne_db, attr, value)
+        db.commit()
+        db.refresh(enseigne_db)
+    return EnseigneSchema.from_orm(enseigne_db)
 
 
-def delete_enseigne(db: Session, enseigne_id: int):
-    enseigne = db.query(Enseigne).get(enseigne_id)
-    if not enseigne:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Enseigne not found")
-    db.delete(enseigne)
-    db.commit()
+def delete_enseigne(db: Session, enseigne_id: int) -> dict:
+    with db:
+        enseigne_db = db.query(Enseigne).get(enseigne_id)
+        if not enseigne_db:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Enseigne not found")
+        db.delete(enseigne_db)
+        db.commit()
     return {"message": "Enseigne deleted"}
