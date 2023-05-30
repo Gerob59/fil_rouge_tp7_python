@@ -1,16 +1,12 @@
-from typing import List
-from pydantic import BaseModel
-
-from . import ConditionnementSchema, ObjetSchema
+from pydantic import BaseModel, PositiveInt
 
 
 class ObjetCondSchema(BaseModel):
-    idrelcond: int  # PrimaryKey
-    qteobjdeb: int
-    qteobjfin: int
-    codobj: int  # ForeignKey('t_objet.codobj')
-    codcond: int  # ForeignKey('t_conditionnement.idcondit')
-    objets: List[ObjetSchema]  # relationship("Objet", back_populates='condit')
-    condit: List[ConditionnementSchema]  # relationship("Conditionnement", back_populates='objets')
+    idrelcond: PositiveInt
+    qteobjdeb: PositiveInt = 0
+    qteobjfin: PositiveInt = 0
+    codobj: PositiveInt
+    codcond: PositiveInt
+
     class Config:
         orm_mode = True

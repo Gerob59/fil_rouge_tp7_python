@@ -1,9 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, confloat, PositiveInt
 
 
 class PoidsSchema(BaseModel):
-    id: int  # PrimaryKey
-    valmin: float
-    valtimbre: float
+    id: PositiveInt
+    valmin: confloat
+    valtimbre: confloat
+
     class Config:
         orm_mode = True

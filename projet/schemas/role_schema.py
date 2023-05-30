@@ -1,8 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, PositiveInt, constr
 
 
 class RoleSchema(BaseModel):
-    codrole: int  # PrimaryKey
-    librole: str
+    codrole: PositiveInt
+    librole: constr(max_length=25) = None
+
     class Config:
         orm_mode = True
