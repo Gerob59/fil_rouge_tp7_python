@@ -12,8 +12,8 @@ DATABASE = {
 }
 
 # Création de l'URL de connexion à la base de données
-DB_URL = f"{DATABASE['drivername']}://{DATABASE['username']}:{DATABASE['password']}@{DATABASE['host']}:{DATABASE['port']}/{DATABASE['database']}"
-# DB_URL = "mysql+pymysql://root@localhost/fromagerie"
+# DB_URL = f"{DATABASE['drivername']}://{DATABASE['username']}:{DATABASE['password']}@{DATABASE['host']}:{DATABASE['port']}/{DATABASE['database']}"
+DB_URL = "mysql+pymysql://root@localhost/fromagerie"
 
 # Déclaration de la classe de base pour les modèles
 Base = declarative_base()
@@ -31,6 +31,11 @@ def initialize_database() -> None:
 
 
 def get_db() -> Session:
+    """
+    Le mot-clé yield est utilisé pour renvoyer temporairement db.
+    Cela signifie que la première fois que la fonction est appelée, elle renverra db en tant que résultat,
+    mais la fonction elle-même restera suspendue dans son état actuel.
+    """
     db = Session()
     try:
         yield db

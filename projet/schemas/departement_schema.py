@@ -1,7 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, constr, conint
 
 
 class DepartementSchema(BaseModel):
-    code_dept: str  # PrimaryKey
-    nom_dept: str
-    ordre_aff_dept: int
+    code_dept: constr(max_length=2)  # Contrainte de longueur maximale de 2 caractères
+    nom_dept: constr(max_length=50)  # Contrainte de longueur maximale de 50 caractères
+    ordre_aff_dept: conint(ge=0)  # Contrainte de valeur minimale de 0 pour les entiers positifs
+
+    class Config:
+        orm_mode = True
