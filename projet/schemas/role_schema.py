@@ -1,4 +1,5 @@
-from pydantic import BaseModel, PositiveInt, constr
+from pydantic import BaseModel
+from pydantic.types import constr, PositiveInt
 
 
 class RoleSchema(BaseModel):

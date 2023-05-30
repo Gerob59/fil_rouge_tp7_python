@@ -1,4 +1,5 @@
-from pydantic import BaseModel, constr, PositiveInt
+from pydantic import BaseModel
+from pydantic.types import constr, PositiveInt
 
 
 class CommuneSchema(BaseModel):

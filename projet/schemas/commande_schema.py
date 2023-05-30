@@ -1,5 +1,6 @@
 from datetime import datetime
-from pydantic import BaseModel, PositiveInt, conint, constr, confloat
+from pydantic import BaseModel
+from pydantic.types import constr, conint, PositiveInt, confloat
 
 
 class CommandeSchema(BaseModel):

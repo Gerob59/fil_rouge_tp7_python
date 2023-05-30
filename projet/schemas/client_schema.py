@@ -1,4 +1,5 @@
-from pydantic import BaseModel, constr, EmailStr, conint, PositiveInt
+from pydantic import BaseModel
+from pydantic.types import constr, conint, PositiveInt
 
 
 class ClientSchema(BaseModel):
@@ -11,7 +12,7 @@ class ClientSchema(BaseModel):
     adresse3cli: constr(max_length=50)
     villecli_id: PositiveInt
     telcli: constr(max_length=10)
-    emailcli: EmailStr
+    emailcli: constr(max_length=255)
     portcli: constr(max_length=10)
     newsletter: conint(ge=0, le=1) = 0
 

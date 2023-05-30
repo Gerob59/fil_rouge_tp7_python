@@ -1,4 +1,5 @@
-from pydantic import BaseModel, PositiveInt
+from pydantic import BaseModel
+from pydantic.types import PositiveInt
 
 
 class VignetteSchema(BaseModel):

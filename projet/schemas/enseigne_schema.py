@@ -1,4 +1,5 @@
-from pydantic import BaseModel, constr, conint, PositiveInt
+from pydantic import BaseModel
+from pydantic.types import constr, conint, PositiveInt
 
 
 class EnseigneSchema(BaseModel):
