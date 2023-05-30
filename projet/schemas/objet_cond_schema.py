@@ -1,11 +1,11 @@
 from pydantic import BaseModel
-from pydantic.types import PositiveInt
+from pydantic.types import PositiveInt, conint
 
 
 class ObjetCondSchema(BaseModel):
     idrelcond: PositiveInt
-    qteobjdeb: PositiveInt = 0
-    qteobjfin: PositiveInt = 0
+    qteobjdeb: conint(ge=0) = 0
+    qteobjfin: conint(ge=0) = 0
     codobj: PositiveInt
     codcond: PositiveInt
 
