@@ -1,25 +1,29 @@
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Configuration de la base de données MySQL
-DATABASE = {
-    'drivername': 'mysql+pymysql',
-    'host': 'localhost',  # par défaut
-    'port': '3306',  # par défaut
-    'username': 'root',
-    'password': '',
-    'database': 'fromagerie',
-}
+env_path = Path(".") / ".env"
+load_dotenv(dotenv_path=env_path)
 
-# Création de l'URL de connexion à la base de données
-# DB_URL = f"{DATABASE['drivername']}://{DATABASE['username']}:{DATABASE['password']}@{DATABASE['host']}:{DATABASE['port']}/{DATABASE['database']}"
-DB_URL = "mysql+pymysql://root@localhost/fromagerie"
+KEY: str = os.getenv("key")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+DRIVERNAME: str = os.getenv("DRIVERNAME", "mysql+pymysql")
+HOST: str = os.getenv("HOST", "localhost")
+USERNAME = os.getenv("USERNAME", "root")
+PASSWORD = os.getenv("PASSWORD", "")
+PORT: str = os.getenv("PORT", 3306)  # default port
+DATABASE: str = os.getenv("DATABASE", "fromagerie")
+DATABASE_URL = f"{DRIVERNAME}://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}"
 
 # Déclaration de la classe de base pour les modèles
 Base = declarative_base()
 
 # Création du moteur SQLAlchemy
-engine = create_engine(DB_URL)
+engine = create_engine(DATABASE_URL)
 
 # Création de l'objet sessionmaker
 Session = sessionmaker(bind=engine)

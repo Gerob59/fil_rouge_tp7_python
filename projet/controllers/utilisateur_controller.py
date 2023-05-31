@@ -12,6 +12,15 @@ def get_utilisateur(db: Session, utilisateur_id: int) -> UtilisateurSchema:
     return UtilisateurSchema.from_orm(utilisateur_db)
 
 
+def get_utilisateur_by_username(db: Session, username: str) -> [UtilisateurSchema]:
+    with db:
+        res_db = db.query(Utilisateur).filter(Utilisateur.username == username)
+        res = []
+        for user in res_db:
+            res.append(UtilisateurSchema.from_orm(user))
+    return res
+
+
 def get_all_utilisateurs(db: Session) -> [UtilisateurSchema]:
     with db:
         res_db = db.query(Utilisateur).all()

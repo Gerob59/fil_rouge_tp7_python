@@ -12,6 +12,11 @@ def get_utilisateur(utilisateur_id: int, db: Session = Depends(get_db)):
     return utilisateur_controller.get_utilisateur(db, utilisateur_id)
 
 
+@router.get("/{username}", response_model=[UtilisateurSchema])
+def get_utilisateur_by_username(username: str, db: Session = Depends(get_db)):
+    return utilisateur_controller.get_utilisateur_by_username(db, username)
+
+
 @router.get("/", response_model=list[UtilisateurSchema])
 def get_all_utilisateurs(db: Session = Depends(get_db)):
     return utilisateur_controller.get_all_utilisateurs(db)

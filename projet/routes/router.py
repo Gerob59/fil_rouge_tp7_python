@@ -7,6 +7,7 @@ from . import (
     departement_router,
     detail_router,
     enseigne_router,
+    login_router,
     objet_router,
     objet_cond_router,
     poids_router,
@@ -25,6 +26,7 @@ def get_routes():
     router.include_router(departement_router.router, prefix="/departements", tags=["Départements"])
     router.include_router(detail_router.router, prefix="/details", tags=["Détails"])
     router.include_router(enseigne_router.router, prefix="/enseignes", tags=["Enseignes"])
+    router.include_router(login_router.router, prefix="/login", tags=["login"])
     router.include_router(objet_router.router, prefix="/objets", tags=["Objets"])
     router.include_router(objet_cond_router.router, prefix="/objet_cond", tags=["Objet Cond"])
     router.include_router(poids_router.router, prefix="/poids", tags=["Poids"])

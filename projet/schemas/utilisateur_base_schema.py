@@ -9,6 +9,7 @@ class UtilisateurBase(BaseModel):
     nom_utilisateur: constr(max_length=50) = None
     prenom_utilisateur: constr(max_length=50) = None
     username: constr(max_length=50) = None
+    password: constr(max_length=255)
     couleur_fond_utilisateur: int = 0
     date_insc_utilisateur: Optional[datetime]
 
