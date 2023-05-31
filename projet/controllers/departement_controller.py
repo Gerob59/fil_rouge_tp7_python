@@ -8,7 +8,7 @@ def get_departement(db: Session, code_dept: str) -> DepartementSchema:
     with db:
         departement_db = db.query(Departement).get(code_dept)
         if not departement_db:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Departement {code_dept} not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Departement not found")
     return DepartementSchema.from_orm(departement_db)
 
 
@@ -31,7 +31,7 @@ def update_departement(db: Session, code_dept: str, updated_departement: Departe
     with db:
         departement_db = db.query(Departement).get(code_dept)
         if not departement_db:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Departement {code_dept} not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Departement not found")
         updated_data = updated_departement.dict(exclude_unset=True)
         for attr, value in updated_data.items():
             if hasattr(departement_db, attr):
@@ -45,7 +45,7 @@ def delete_departement(db: Session, code_dept: str) -> dict:
     with db:
         departement_db = db.query(Departement).get(code_dept)
         if not departement_db:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Departement {code_dept} not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Departement not found")
         db.delete(departement_db)
         db.commit()
-    return {"message": f"Departement {code_dept} deleted"}
+    return {"message": f"Departement deleted"}

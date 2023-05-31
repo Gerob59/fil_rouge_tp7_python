@@ -8,7 +8,9 @@ from .enseigne_schema import EnseigneSchema
 from .objet_schema import ObjetSchema
 from .objet_cond_schema import ObjetCondSchema
 from .poids_schema import PoidsSchema
+from .role_base_schema import RoleBase
 from .role_schema import RoleSchema
+from .utilisateur_base_schema import UtilisateurBase
 from .utilisateur_schema import UtilisateurSchema
 from .vignette_schema import VignetteSchema
-from .token_schema import TokenSchema
+from .token_schema import TokenSchema, TokenDataSchema

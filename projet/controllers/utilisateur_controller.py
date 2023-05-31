@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import Utilisateur
 from ..schemas import UtilisateurSchema
+from ..utils import hashing
 
 
 def get_utilisateur(db: Session, utilisateur_id: int) -> UtilisateurSchema:
@@ -12,13 +13,12 @@ def get_utilisateur(db: Session, utilisateur_id: int) -> UtilisateurSchema:
     return UtilisateurSchema.from_orm(utilisateur_db)
 
 
-def get_utilisateur_by_username(db: Session, username: str) -> [UtilisateurSchema]:
+def get_utilisateur_by_username(db: Session, username: str) -> UtilisateurSchema:
     with db:
-        res_db = db.query(Utilisateur).filter(Utilisateur.username == username)
-        res = []
-        for user in res_db:
-            res.append(UtilisateurSchema.from_orm(user))
-    return res
+        utilisateur_db = db.query(Utilisateur).filter(Utilisateur.username == username)
+        if not utilisateur_db:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Utilisateur not found")
+    return UtilisateurSchema.from_orm(utilisateur_db)
 
 
 def get_all_utilisateurs(db: Session) -> [UtilisateurSchema]:
@@ -32,7 +32,15 @@ def get_all_utilisateurs(db: Session) -> [UtilisateurSchema]:
 
 def create_utilisateur(db: Session, utilisateur: UtilisateurSchema) -> UtilisateurSchema:
     with db:
+        # create an utilisateur
         utilisateur_db = Utilisateur(**utilisateur.dict())
+
+        # hash the password
+        hashed_password = hashing(utilisateur.password)
+
+        # modify utilisateur password with the hashed one
+        utilisateur_db.password = hashed_password
+
         db.add(utilisateur_db)
         db.commit()
         db.refresh(utilisateur_db)
