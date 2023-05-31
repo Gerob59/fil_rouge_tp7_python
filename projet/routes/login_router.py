@@ -5,7 +5,7 @@ from ..schemas import TokenSchema
 from ..models import Utilisateur
 from config import get_db
 from ..utils import verify
-from ..oauth2 import create_access_token
+from ..auth import create_access_token
 
 # router = APIRouter(tags=['Authentication'])
 router = APIRouter()
