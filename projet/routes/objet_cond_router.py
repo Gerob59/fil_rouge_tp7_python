@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from ..controllers import objet_cond_controller
 from ..schemas import ObjetCondSchema
-from config.db import get_db
+from config import get_db
 
 router = APIRouter()
 

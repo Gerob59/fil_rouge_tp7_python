@@ -1,8 +1,8 @@
-from fastapi import HTTPException, APIRouter, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from ..controllers import commune_controller
 from ..schemas import CommuneSchema
-from config.db import get_db
+from config import get_db
 
 router = APIRouter()
 

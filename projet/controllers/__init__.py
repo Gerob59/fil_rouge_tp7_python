@@ -11,3 +11,4 @@ from .poids_controller import *
 from .role_controller import *
 from .utilisateur_controller import *
 from .vignette_controller import *
+from .login_controller import get_user

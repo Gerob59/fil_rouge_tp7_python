@@ -11,3 +11,4 @@ from .poids_schema import PoidsSchema
 from .role_schema import RoleSchema
 from .utilisateur_schema import UtilisateurSchema
 from .vignette_schema import VignetteSchema
+from .token_schema import TokenSchema

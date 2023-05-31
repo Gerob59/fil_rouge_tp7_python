@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Numeric
 from sqlalchemy.orm import relationship
-from config.db import Base
+from config import Base
 
 
 class Objet(Base):
