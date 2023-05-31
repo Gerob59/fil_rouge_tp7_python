@@ -14,8 +14,12 @@ def get_role(db: Session, role_id: int) -> RoleSchema:
 
 def get_all_roles(db: Session) -> [RoleSchema]:
     with db:
-        resultat = db.query(Role).all()
-    return resultat
+        res_db = db.query(Role).all()
+        res = []
+        for role in res_db:
+            res.append(RoleSchema.from_orm(role))
+
+    return res
 
 
 def create_role(db: Session, role: RoleSchema) -> RoleSchema:
