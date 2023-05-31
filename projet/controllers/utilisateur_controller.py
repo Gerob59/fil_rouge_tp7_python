@@ -14,8 +14,11 @@ def get_utilisateur(db: Session, utilisateur_id: int) -> UtilisateurSchema:
 
 def get_all_utilisateurs(db: Session) -> [UtilisateurSchema]:
     with db:
-        resultat = db.query(Utilisateur).all()
-    return resultat
+        res_db = db.query(Utilisateur).all()
+        res = []
+        for user in res_db:
+            res.append(UtilisateurSchema.from_orm(user))
+    return res
 
 
 def create_utilisateur(db: Session, utilisateur: UtilisateurSchema) -> UtilisateurSchema:

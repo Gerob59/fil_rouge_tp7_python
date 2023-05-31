@@ -4,12 +4,10 @@ from .commune_controller import *
 from .conditionnement_controller import *
 from .departement_controller import *
 from .detail_controller import *
-from .detail_objet_controller import *
 from .enseigne_controller import *
 from .objet_controller import *
 from .objet_cond_controller import *
 from .poids_controller import *
 from .role_controller import *
-from .role_utilisateur_controller import *
 from .utilisateur_controller import *
 from .vignette_controller import *
