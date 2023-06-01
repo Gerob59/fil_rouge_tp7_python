@@ -5,32 +5,32 @@ from ..schemas import UtilisateurSchema, UtilisateurBase
 from ..utils import hashing
 
 
-def get_utilisateur(db: Session, utilisateur_id: int) -> UtilisateurSchema:
+def get_utilisateur(db: Session, utilisateur_id: int) -> UtilisateurBase:
     with db:
         utilisateur_db = db.query(Utilisateur).get(utilisateur_id)
         if not utilisateur_db:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Utilisateur not found")
-    return UtilisateurSchema.from_orm(utilisateur_db)
+    return UtilisateurBase.from_orm(utilisateur_db)
 
 
-def get_utilisateur_by_username(db: Session, username: str) -> UtilisateurSchema:
+def get_utilisateur_by_username(db: Session, username: str) -> UtilisateurBase:
     with db:
         utilisateur_db = db.query(Utilisateur).filter(Utilisateur.username == username)
         if not utilisateur_db:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Utilisateur not found")
-    return UtilisateurSchema.from_orm(utilisateur_db)
+    return UtilisateurBase.from_orm(utilisateur_db)
 
 
-def get_all_utilisateurs(db: Session) -> [UtilisateurSchema]:
+def get_all_utilisateurs(db: Session) -> [UtilisateurBase]:
     with db:
         res_db = db.query(Utilisateur).all()
         res = []
         for user in res_db:
-            res.append(UtilisateurSchema.from_orm(user))
+            res.append(UtilisateurBase.from_orm(user))
     return res
 
 
-def create_utilisateur(db: Session, utilisateur: UtilisateurSchema) -> UtilisateurSchema:
+def create_utilisateur(db: Session, utilisateur: UtilisateurSchema) -> UtilisateurBase:
     with db:
         # create an utilisateur
         utilisateur_db = Utilisateur(**utilisateur.dict())
