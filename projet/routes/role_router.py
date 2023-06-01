@@ -1,23 +1,23 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from ..controllers import role_controller
-from ..schemas import RoleSchema
+from ..schemas import RoleSchema, RoleBase
 from config import get_db
 
 router = APIRouter()
 
 
-@router.get("/{role_id}", response_model=RoleSchema)
+@router.get("/{role_id}", response_model=RoleBase)
 def get_role(role_id: int, db: Session = Depends(get_db)):
     return role_controller.get_role(db, role_id)
 
 
-@router.get("/", response_model=list[RoleSchema])
+@router.get("/", response_model=list[RoleBase])
 def get_all_roles(db: Session = Depends(get_db)):
     return role_controller.get_all_roles(db)
 
 
-@router.post("/", response_model=RoleSchema)
+@router.post("/", response_model=RoleBase)
 def create_role(role: RoleSchema, db: Session = Depends(get_db)):
     return role_controller.create_role(db, role)
 

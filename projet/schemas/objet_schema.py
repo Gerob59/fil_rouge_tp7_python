@@ -1,9 +1,11 @@
+from typing import Optional
+
 from pydantic import BaseModel
-from pydantic.types import constr, PositiveInt, confloat, conint
+from pydantic.types import constr, confloat, conint
 
 
 class ObjetSchema(BaseModel):
-    codobj: PositiveInt
+    codobj: Optional[int]
     libobj: constr(max_length=50) = None
     tailleobj: constr(max_length=50) = None
     puobj: confloat(gt=0) = 0.0000
