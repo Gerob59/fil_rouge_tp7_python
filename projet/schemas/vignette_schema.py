@@ -1,9 +1,10 @@
+from typing import Optional
 from pydantic import BaseModel
-from pydantic.types import PositiveInt, confloat
+from pydantic.types import confloat
 
 
 class VignetteSchema(BaseModel):
-    id: PositiveInt
+    id: Optional[int]
     valmin: confloat(ge=0) = 0
     valtimbre: confloat(ge=0) = 0
 
