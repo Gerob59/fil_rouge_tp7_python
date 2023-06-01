@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from ..controllers import utilisateur_controller
-from ..schemas import UtilisateurSchema
+from ..schemas import UtilisateurSchema, UtilisateurBase
 from config import get_db
 
 router = APIRouter()
@@ -17,7 +17,7 @@ def get_utilisateur_by_username(username: str, db: Session = Depends(get_db)):
     return utilisateur_controller.get_utilisateur_by_username(db, username)
 
 
-@router.get("/", response_model=list[UtilisateurSchema])
+@router.get("/", response_model=list[UtilisateurBase])
 def get_all_utilisateurs(db: Session = Depends(get_db)):
     return utilisateur_controller.get_all_utilisateurs(db)
 

@@ -8,7 +8,7 @@ else:
     SQLALCHEMY_DATABASE_URL = f'mysql+pymysql://{settings.database_username}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
-Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Session = sessionmaker(bind=engine)
 Base = declarative_base()
 
 

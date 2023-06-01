@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from ..models import Utilisateur
-from ..schemas import UtilisateurSchema
+from ..schemas import UtilisateurSchema, UtilisateurBase
 from ..utils import hashing
 
 
@@ -44,7 +44,7 @@ def create_utilisateur(db: Session, utilisateur: UtilisateurSchema) -> Utilisate
         db.add(utilisateur_db)
         db.commit()
         db.refresh(utilisateur_db)
-    return UtilisateurSchema.from_orm(utilisateur_db)
+    return UtilisateurBase.from_orm(utilisateur_db)
 
 
 def update_utilisateur(db: Session, utilisateur_id: int, updated_utilisateur: UtilisateurSchema) -> UtilisateurSchema:

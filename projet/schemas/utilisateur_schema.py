@@ -3,4 +3,4 @@ from .utilisateur_base_schema import UtilisateurBase
 
 
 class UtilisateurSchema(UtilisateurBase):
-    roles: list[RoleBase]
+    roles: list[RoleBase] = []
