@@ -13,6 +13,5 @@ class Utilisateur(Base):
     username = Column(String(50), default=None)
     password = Column(String(255))
     couleur_fond_utilisateur = Column(Integer, default=0)
-    date_insc_utilisateur = Column(Date)
+    date_insc_utilisateur = Column(Date, default=None)
     roles = relationship("Role", secondary="t_utilisateur_role", back_populates="users")
-    

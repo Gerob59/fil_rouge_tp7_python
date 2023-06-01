@@ -15,8 +15,3 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(get_routes())
-
-
-@app.get("/")
-def root():
-    return {"message": "Hello World pushing out to ubuntu"}
