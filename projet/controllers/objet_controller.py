@@ -14,8 +14,11 @@ def get_objet(db: Session, objet_id: int) -> ObjetSchema:
 
 def get_all_objets(db: Session) -> [ObjetSchema]:
     with db:
-        resultat = db.query(Objet).all()
-    return resultat
+        res_db = db.query(Objet).all()
+        res = []
+        for obj in res_db:
+            res.append(ObjetSchema.from_orm(obj))
+    return res
 
 
 def create_objet(db: Session, objet: ObjetSchema) -> ObjetSchema:

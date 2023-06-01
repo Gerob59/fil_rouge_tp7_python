@@ -3,19 +3,12 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 26 mai 2023 à 16:58
+-- Généré le : jeu. 01 juin 2023 à 14:13
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de données : `fromagerie`
@@ -29,20 +22,22 @@ USE `fromagerie`;
 -- Structure de la table `t_client`
 --
 
-DROP TABLE IF EXISTS `t_client`;
-CREATE TABLE `t_client` (
-  `codcli` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_client` (
+  `codcli` int(11) NOT NULL AUTO_INCREMENT,
   `genrecli` varchar(8) DEFAULT NULL,
   `nomcli` varchar(40) DEFAULT NULL,
   `prenomcli` varchar(30) DEFAULT NULL,
   `adresse1cli` varchar(50) DEFAULT NULL,
   `adresse2cli` varchar(50) DEFAULT NULL,
   `adresse3cli` varchar(50) DEFAULT NULL,
-  `villecli_id` int(11) DEFAULT NULL,
+  `villecli_id` int(11) NOT NULL,
   `telcli` varchar(10) DEFAULT NULL,
   `emailcli` varchar(255) DEFAULT NULL,
   `portcli` varchar(10) DEFAULT NULL,
-  `newsletter` int(11) DEFAULT NULL
+  `newsletter` int(11) DEFAULT NULL,
+  PRIMARY KEY (`codcli`),
+  KEY `villecli_id` (`villecli_id`),
+  KEY `ix_t_client_nomcli` (`nomcli`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -51,12 +46,13 @@ CREATE TABLE `t_client` (
 -- Structure de la table `t_communes`
 --
 
-DROP TABLE IF EXISTS `t_communes`;
-CREATE TABLE `t_communes` (
-  `id` int(11) NOT NULL,
-  `dep` varchar(2) DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `t_communes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dep` varchar(2) NOT NULL,
   `cp` varchar(5) DEFAULT NULL,
-  `ville` varchar(50) DEFAULT NULL
+  `ville` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `commune_index` (`dep`,`cp`,`ville`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -65,13 +61,13 @@ CREATE TABLE `t_communes` (
 -- Structure de la table `t_conditionnement`
 --
 
-DROP TABLE IF EXISTS `t_conditionnement`;
-CREATE TABLE `t_conditionnement` (
-  `idcondit` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_conditionnement` (
+  `idcondit` int(11) NOT NULL AUTO_INCREMENT,
   `libcondit` varchar(50) DEFAULT NULL,
   `poidscondit` int(11) DEFAULT NULL,
   `prixcond` decimal(10,0) DEFAULT NULL,
-  `ordreimp` int(11) DEFAULT NULL
+  `ordreimp` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idcondit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -80,11 +76,11 @@ CREATE TABLE `t_conditionnement` (
 -- Structure de la table `t_dept`
 --
 
-DROP TABLE IF EXISTS `t_dept`;
-CREATE TABLE `t_dept` (
+CREATE TABLE IF NOT EXISTS `t_dept` (
   `code_dept` varchar(2) NOT NULL,
   `nom_dept` varchar(50) DEFAULT NULL,
-  `ordre_aff_dept` int(11) DEFAULT NULL
+  `ordre_aff_dept` int(11) DEFAULT NULL,
+  PRIMARY KEY (`code_dept`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -93,13 +89,14 @@ CREATE TABLE `t_dept` (
 -- Structure de la table `t_dtlcode`
 --
 
-DROP TABLE IF EXISTS `t_dtlcode`;
-CREATE TABLE `t_dtlcode` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_dtlcode` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `codcde` int(11) DEFAULT NULL,
   `qte` int(11) DEFAULT NULL,
   `colis` int(11) DEFAULT NULL,
-  `commentaire` varchar(100) DEFAULT NULL
+  `commentaire` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ix_t_dtlcode_codcde` (`codcde`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -108,11 +105,28 @@ CREATE TABLE `t_dtlcode` (
 -- Structure de la table `t_dtlcode_codobj`
 --
 
-DROP TABLE IF EXISTS `t_dtlcode_codobj`;
-CREATE TABLE `t_dtlcode_codobj` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_dtlcode_codobj` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `detail_id` int(11) DEFAULT NULL,
-  `objet_id` int(11) DEFAULT NULL
+  `objet_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `detail_id` (`detail_id`),
+  KEY `objet_id` (`objet_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `t_dtlcode_idcondit`
+--
+
+CREATE TABLE IF NOT EXISTS `t_dtlcode_idcondit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `detail_id` int(11) DEFAULT NULL,
+  `conditionnement_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `detail_id` (`detail_id`),
+  KEY `conditionnement_id` (`conditionnement_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -121,12 +135,12 @@ CREATE TABLE `t_dtlcode_codobj` (
 -- Structure de la table `t_enseigne`
 --
 
-DROP TABLE IF EXISTS `t_enseigne`;
-CREATE TABLE `t_enseigne` (
-  `id_enseigne` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_enseigne` (
+  `id_enseigne` int(11) NOT NULL AUTO_INCREMENT,
   `lb_enseigne` varchar(50) DEFAULT NULL,
   `ville_enseigne` varchar(50) DEFAULT NULL,
-  `dept_enseigne` int(11) DEFAULT NULL
+  `dept_enseigne` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_enseigne`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -135,19 +149,20 @@ CREATE TABLE `t_enseigne` (
 -- Structure de la table `t_entcde`
 --
 
-DROP TABLE IF EXISTS `t_entcde`;
-CREATE TABLE `t_entcde` (
-  `codcde` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_entcde` (
+  `codcde` int(11) NOT NULL AUTO_INCREMENT,
   `datcde` date DEFAULT NULL,
   `codcli` int(11) DEFAULT NULL,
   `timbrecli` float DEFAULT NULL,
   `timbrecde` float DEFAULT NULL,
   `nbcolis` int(11) DEFAULT NULL,
   `cheqcli` float DEFAULT NULL,
-  `idcondit` int(11) DEFAULT NULL,
   `cdeComt` varchar(255) DEFAULT NULL,
   `barchive` int(11) DEFAULT NULL,
-  `bstock` int(11) DEFAULT NULL
+  `bstock` int(11) DEFAULT NULL,
+  PRIMARY KEY (`codcde`),
+  KEY `codcli` (`codcli`),
+  KEY `commmande_index` (`cdeComt`,`codcli`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -156,9 +171,8 @@ CREATE TABLE `t_entcde` (
 -- Structure de la table `t_objet`
 --
 
-DROP TABLE IF EXISTS `t_objet`;
-CREATE TABLE `t_objet` (
-  `codobj` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_objet` (
+  `codobj` int(11) NOT NULL AUTO_INCREMENT,
   `libobj` varchar(50) DEFAULT NULL,
   `tailleobj` varchar(50) DEFAULT NULL,
   `puobj` decimal(10,0) DEFAULT NULL,
@@ -168,7 +182,8 @@ CREATE TABLE `t_objet` (
   `o_aff` int(11) DEFAULT NULL,
   `o_cartp` int(11) DEFAULT NULL,
   `points` int(11) DEFAULT NULL,
-  `o_ordre_aff` int(11) DEFAULT NULL
+  `o_ordre_aff` int(11) DEFAULT NULL,
+  PRIMARY KEY (`codobj`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -177,11 +192,11 @@ CREATE TABLE `t_objet` (
 -- Structure de la table `t_poids`
 --
 
-DROP TABLE IF EXISTS `t_poids`;
-CREATE TABLE `t_poids` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_poids` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `valmin` decimal(10,0) DEFAULT NULL,
-  `valtimbre` decimal(10,0) DEFAULT NULL
+  `valtimbre` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -190,26 +205,11 @@ CREATE TABLE `t_poids` (
 -- Structure de la table `t_poidsv`
 --
 
-DROP TABLE IF EXISTS `t_poidsv`;
-CREATE TABLE `t_poidsv` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_poidsv` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `valmin` decimal(10,0) DEFAULT NULL,
-  `valtimbre` decimal(10,0) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `t_rel_cond`
---
-
-DROP TABLE IF EXISTS `t_rel_cond`;
-CREATE TABLE `t_rel_cond` (
-  `idrelcond` int(11) NOT NULL,
-  `qteobjdeb` int(11) DEFAULT NULL,
-  `qteobjfin` int(11) DEFAULT NULL,
-  `codobj` int(11) DEFAULT NULL,
-  `codcond` int(11) DEFAULT NULL
+  `valtimbre` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -218,10 +218,10 @@ CREATE TABLE `t_rel_cond` (
 -- Structure de la table `t_role`
 --
 
-DROP TABLE IF EXISTS `t_role`;
-CREATE TABLE `t_role` (
-  `codrole` int(11) NOT NULL,
-  `librole` varchar(25) DEFAULT NULL
+CREATE TABLE IF NOT EXISTS `t_role` (
+  `codrole` int(11) NOT NULL AUTO_INCREMENT,
+  `librole` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`codrole`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -230,14 +230,15 @@ CREATE TABLE `t_role` (
 -- Structure de la table `t_utilisateur`
 --
 
-DROP TABLE IF EXISTS `t_utilisateur`;
-CREATE TABLE `t_utilisateur` (
-  `code_utilisateur` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_utilisateur` (
+  `code_utilisateur` int(11) NOT NULL AUTO_INCREMENT,
   `nom_utilisateur` varchar(50) DEFAULT NULL,
   `prenom_utilisateur` varchar(50) DEFAULT NULL,
   `username` varchar(50) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `couleur_fond_utilisateur` int(11) DEFAULT NULL,
-  `date_insc_utilisateur` date DEFAULT NULL
+  `date_insc_utilisateur` date DEFAULT NULL,
+  PRIMARY KEY (`code_utilisateur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -246,207 +247,14 @@ CREATE TABLE `t_utilisateur` (
 -- Structure de la table `t_utilisateur_role`
 --
 
-DROP TABLE IF EXISTS `t_utilisateur_role`;
-CREATE TABLE `t_utilisateur_role` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `t_utilisateur_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `utilisateur_id` int(11) DEFAULT NULL,
-  `role_id` int(11) DEFAULT NULL
+  `role_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `utilisateur_id` (`utilisateur_id`),
+  KEY `role_id` (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Index pour les tables déchargées
---
-
---
--- Index pour la table `t_client`
---
-ALTER TABLE `t_client`
-  ADD PRIMARY KEY (`codcli`),
-  ADD KEY `villecli_id` (`villecli_id`),
-  ADD KEY `ix_t_client_nomcli` (`nomcli`);
-
---
--- Index pour la table `t_communes`
---
-ALTER TABLE `t_communes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `commune_index` (`dep`,`cp`,`ville`);
-
---
--- Index pour la table `t_conditionnement`
---
-ALTER TABLE `t_conditionnement`
-  ADD PRIMARY KEY (`idcondit`);
-
---
--- Index pour la table `t_dept`
---
-ALTER TABLE `t_dept`
-  ADD PRIMARY KEY (`code_dept`);
-
---
--- Index pour la table `t_dtlcode`
---
-ALTER TABLE `t_dtlcode`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ix_t_dtlcode_codcde` (`codcde`);
-
---
--- Index pour la table `t_dtlcode_codobj`
---
-ALTER TABLE `t_dtlcode_codobj`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `detail_id` (`detail_id`),
-  ADD KEY `objet_id` (`objet_id`);
-
---
--- Index pour la table `t_enseigne`
---
-ALTER TABLE `t_enseigne`
-  ADD PRIMARY KEY (`id_enseigne`);
-
---
--- Index pour la table `t_entcde`
---
-ALTER TABLE `t_entcde`
-  ADD PRIMARY KEY (`codcde`),
-  ADD KEY `codcli` (`codcli`),
-  ADD KEY `commmande_index` (`cdeComt`,`codcli`);
-
---
--- Index pour la table `t_objet`
---
-ALTER TABLE `t_objet`
-  ADD PRIMARY KEY (`codobj`);
-
---
--- Index pour la table `t_poids`
---
-ALTER TABLE `t_poids`
-  ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `t_poidsv`
---
-ALTER TABLE `t_poidsv`
-  ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `t_rel_cond`
---
-ALTER TABLE `t_rel_cond`
-  ADD PRIMARY KEY (`idrelcond`),
-  ADD KEY `codobj` (`codobj`),
-  ADD KEY `codcond` (`codcond`),
-  ADD KEY `ix_t_rel_cond_idrelcond` (`idrelcond`);
-
---
--- Index pour la table `t_role`
---
-ALTER TABLE `t_role`
-  ADD PRIMARY KEY (`codrole`);
-
---
--- Index pour la table `t_utilisateur`
---
-ALTER TABLE `t_utilisateur`
-  ADD PRIMARY KEY (`code_utilisateur`);
-
---
--- Index pour la table `t_utilisateur_role`
---
-ALTER TABLE `t_utilisateur_role`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `utilisateur_id` (`utilisateur_id`),
-  ADD KEY `role_id` (`role_id`);
-
---
--- AUTO_INCREMENT pour les tables déchargées
---
-
---
--- AUTO_INCREMENT pour la table `t_client`
---
-ALTER TABLE `t_client`
-  MODIFY `codcli` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_communes`
---
-ALTER TABLE `t_communes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_conditionnement`
---
-ALTER TABLE `t_conditionnement`
-  MODIFY `idcondit` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_dtlcode`
---
-ALTER TABLE `t_dtlcode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_dtlcode_codobj`
---
-ALTER TABLE `t_dtlcode_codobj`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_enseigne`
---
-ALTER TABLE `t_enseigne`
-  MODIFY `id_enseigne` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_entcde`
---
-ALTER TABLE `t_entcde`
-  MODIFY `codcde` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_objet`
---
-ALTER TABLE `t_objet`
-  MODIFY `codobj` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_poids`
---
-ALTER TABLE `t_poids`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_poidsv`
---
-ALTER TABLE `t_poidsv`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_rel_cond`
---
-ALTER TABLE `t_rel_cond`
-  MODIFY `idrelcond` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_role`
---
-ALTER TABLE `t_role`
-  MODIFY `codrole` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_utilisateur`
---
-ALTER TABLE `t_utilisateur`
-  MODIFY `code_utilisateur` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_utilisateur_role`
---
-ALTER TABLE `t_utilisateur_role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
@@ -478,17 +286,17 @@ ALTER TABLE `t_dtlcode_codobj`
   ADD CONSTRAINT `t_dtlcode_codobj_ibfk_2` FOREIGN KEY (`objet_id`) REFERENCES `t_objet` (`codobj`);
 
 --
+-- Contraintes pour la table `t_dtlcode_idcondit`
+--
+ALTER TABLE `t_dtlcode_idcondit`
+  ADD CONSTRAINT `t_dtlcode_idcondit_ibfk_1` FOREIGN KEY (`detail_id`) REFERENCES `t_dtlcode` (`id`),
+  ADD CONSTRAINT `t_dtlcode_idcondit_ibfk_2` FOREIGN KEY (`conditionnement_id`) REFERENCES `t_conditionnement` (`idcondit`);
+
+--
 -- Contraintes pour la table `t_entcde`
 --
 ALTER TABLE `t_entcde`
   ADD CONSTRAINT `t_entcde_ibfk_1` FOREIGN KEY (`codcli`) REFERENCES `t_client` (`codcli`);
-
---
--- Contraintes pour la table `t_rel_cond`
---
-ALTER TABLE `t_rel_cond`
-  ADD CONSTRAINT `t_rel_cond_ibfk_1` FOREIGN KEY (`codobj`) REFERENCES `t_objet` (`codobj`),
-  ADD CONSTRAINT `t_rel_cond_ibfk_2` FOREIGN KEY (`codcond`) REFERENCES `t_conditionnement` (`idcondit`);
 
 --
 -- Contraintes pour la table `t_utilisateur_role`
@@ -497,7 +305,3 @@ ALTER TABLE `t_utilisateur_role`
   ADD CONSTRAINT `t_utilisateur_role_ibfk_1` FOREIGN KEY (`utilisateur_id`) REFERENCES `t_utilisateur` (`code_utilisateur`),
   ADD CONSTRAINT `t_utilisateur_role_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `t_role` (`codrole`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -1,5 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+
 from config import Base
+from .commune import Commune
 
 
 class Client(Base):
@@ -12,7 +15,7 @@ class Client(Base):
     adresse1cli = Column(String(50), default=None)
     adresse2cli = Column(String(50), default=None)
     adresse3cli = Column(String(50), default=None)
-    villecli_id = Column(Integer, ForeignKey('t_communes.id'))
+    villecli_id: Mapped["Commune"] = mapped_column(Integer, ForeignKey('t_communes.id'))
     telcli = Column(String(10), default=None)
     emailcli = Column(String(255), default=None)
     portcli = Column(String(10), default=None)

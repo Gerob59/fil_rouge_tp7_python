@@ -7,7 +7,6 @@ from .detail import Detail
 from .detail_objet import DetailObjet
 from .enseigne import Enseigne
 from .objet import Objet
-from .objet_cond import ObjetCond
 from .poids import Poids
 from .role import Role
 from .role_utilisateur import RoleUtilisateur

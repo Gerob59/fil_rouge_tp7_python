@@ -17,4 +17,4 @@ class Objet(Base):
     o_cartp = Column(Integer, default=0)
     points = Column(Integer, default=0)
     o_ordre_aff = Column(Integer, default=0)
-    condit = relationship("ObjetCond", back_populates='objets')
+    details = relationship("Detail", secondary="t_dtlcode_codobj", back_populates="objets")

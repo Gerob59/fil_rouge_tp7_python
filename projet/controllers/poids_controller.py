@@ -14,8 +14,11 @@ def get_poids(db: Session, poids_id: int) -> PoidsSchema:
 
 def get_all_poids(db: Session) -> [PoidsSchema]:
     with db:
-        resultat = db.query(Poids).all()
-    return resultat
+        res_db = db.query(Poids).all()
+        res = []
+        for poids in res_db:
+            res.append(PoidsSchema.from_orm(poids))
+    return res
 
 
 def create_poids(db: Session, poids: PoidsSchema) -> PoidsSchema:

@@ -1,14 +1,6 @@
-from typing import Optional
-from pydantic import BaseModel
-from pydantic.types import constr, confloat, conint
+from projet.schemas.conditionnement_base_schema import ConditionnementBase
+from projet.schemas.detail_base_schema import DetailBase
 
 
-class ConditionnementSchema(BaseModel):
-    idcondit: Optional[int]
-    libcondit: constr(max_length=50) = None
-    poidscondit: int
-    prixcond: confloat(ge=0) = 0.0000
-    ordreimp: conint(ge=0) = 0
-
-    class Config:
-        orm_mode = True
+class ConditionnementSchema(ConditionnementBase):
+    details: list[DetailBase]

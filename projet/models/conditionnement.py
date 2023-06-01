@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Numeric
 from sqlalchemy.orm import relationship
+
 from config import Base
 
 
@@ -11,5 +12,5 @@ class Conditionnement(Base):
     poidscondit = Column(Integer)
     prixcond = Column(Numeric, default=0.0000)
     ordreimp = Column(Integer)
-    # codobj = Column(Integer, ForeignKey('t_objet.codobj'))
-    objets = relationship("ObjetCond", back_populates='condit')
+
+    details = relationship("Detail", secondary="t_dtlcode_idcondit", back_populates="conditionnements")

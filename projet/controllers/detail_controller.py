@@ -14,8 +14,12 @@ def get_detail(db: Session, detail_id: int) -> DetailSchema:
 
 def get_all_details(db: Session) -> [DetailSchema]:
     with db:
-        resultat = db.query(Detail).all()
-    return resultat
+        res_db = db.query(Detail).all()
+        res = []
+        for detail in res_db:
+            res.append(DetailSchema.from_orm(detail))
+
+    return res
 
 
 def create_detail(db: Session, detail: DetailSchema) -> DetailSchema:

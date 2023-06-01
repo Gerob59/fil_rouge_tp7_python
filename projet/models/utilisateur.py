@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import relationship
 
-from config import Base
+from config.db import Base
 
 
 class Utilisateur(Base):

@@ -14,8 +14,11 @@ def get_conditionnement(db: Session, conditionnement_id: int) -> Conditionnement
 
 def get_all_conditionnements(db: Session) -> [ConditionnementSchema]:
     with db:
-        resultat = db.query(Conditionnement).all()
-    return resultat
+        res_db = db.query(Conditionnement).all()
+        res = []
+        for cond in res_db:
+            res.append(ConditionnementSchema.from_orm(cond))
+    return res
 
 
 def create_conditionnement(db: Session, conditionnement: ConditionnementSchema) -> ConditionnementSchema:

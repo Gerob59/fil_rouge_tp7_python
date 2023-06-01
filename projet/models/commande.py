@@ -12,7 +12,6 @@ class Commande(Base):
     timbrecde = Column(Float)
     nbcolis = Column(Integer, default=1)
     cheqcli = Column(Float)
-    idcondit = Column(Integer, default=0)
     cdeComt = Column(String(255), default=None)
     barchive = Column(Integer, default=0)
     bstock = Column(Integer, default=0)

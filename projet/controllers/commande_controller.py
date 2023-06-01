@@ -14,8 +14,11 @@ def get_commande(db: Session, commande_id: int) -> CommandeSchema:
 
 def get_all_commandes(db: Session) -> [CommandeSchema]:
     with db:
-        resultat = db.query(Commande).all()
-    return resultat
+        res_db = db.query(Commande).all()
+        res = []
+        for cmd in res_db:
+            res.append(CommandeSchema.from_orm(cmd))
+    return res
 
 
 def create_commande(db: Session, commande: CommandeSchema) -> CommandeSchema:

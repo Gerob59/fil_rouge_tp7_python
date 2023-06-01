@@ -6,7 +6,6 @@ from .departement_schema import DepartementSchema
 from .detail_schema import DetailSchema
 from .enseigne_schema import EnseigneSchema
 from .objet_schema import ObjetSchema
-from .objet_cond_schema import ObjetCondSchema
 from .poids_schema import PoidsSchema
 from .role_schema import RoleSchema
 from .role_base_schema import RoleBase

@@ -14,8 +14,11 @@ def get_enseigne(db: Session, enseigne_id: int) -> EnseigneSchema:
 
 def get_all_enseignes(db: Session) -> [EnseigneSchema]:
     with db:
-        resultat = db.query(Enseigne).all()
-    return resultat
+        res_db = db.query(Enseigne).all()
+        res = []
+        for enseigne in res_db:
+            res.append(EnseigneSchema.from_orm(enseigne))
+    return res
 
 
 def create_enseigne(db: Session, enseigne: EnseigneSchema) -> EnseigneSchema:

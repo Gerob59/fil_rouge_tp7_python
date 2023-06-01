@@ -1,14 +1,9 @@
-from typing import Optional
-from pydantic import BaseModel
-from pydantic.types import constr, conint
+from .conditionnement_base_schema import ConditionnementBase
+from .detail_base_schema import DetailBase
+from .objet_schema import ObjetBase
 
 
-class DetailSchema(BaseModel):
-    id: Optional[int]
-    codcde: int
-    qte: conint(ge=1) = 1
-    colis: conint(ge=1) = 1
-    commentaire: constr(max_length=100) = None
+class DetailSchema(DetailBase):
+    objets: list[ObjetBase]
+    conditionnements: list[ConditionnementBase]
 
-    class Config:
-        orm_mode = True

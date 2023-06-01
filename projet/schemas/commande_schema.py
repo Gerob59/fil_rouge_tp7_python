@@ -3,6 +3,8 @@ from typing import Optional
 from pydantic import BaseModel
 from pydantic.types import constr, conint, confloat
 
+from projet.schemas.detail_base_schema import DetailBase
+
 
 class CommandeSchema(BaseModel):
     codcde: Optional[int]
@@ -16,6 +18,7 @@ class CommandeSchema(BaseModel):
     cdeComt: constr(max_length=255) = None
     barchive: conint(ge=0) = 0
     bstock: conint(ge=0) = 0
+    details: list[DetailBase]
 
     class Config:
         orm_mode = True

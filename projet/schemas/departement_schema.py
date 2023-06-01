@@ -7,5 +7,6 @@ class DepartementSchema(BaseModel):
     nom_dept: constr(max_length=50)
     ordre_aff_dept: conint(ge=0)
 
+
     class Config:
         orm_mode = True

@@ -14,8 +14,11 @@ def get_vignette(db: Session, vignette_id: int) -> VignetteSchema:
 
 def get_all_vignettes(db: Session) -> [VignetteSchema]:
     with db:
-        resultat = db.query(Vignette).all()
-    return resultat
+        res_db = db.query(Vignette).all()
+        res = []
+        for vin in res_db:
+            res.append(VignetteSchema.from_orm(vin))
+    return res
 
 
 def create_vignette(db: Session, vignette: VignetteSchema) -> VignetteSchema:
