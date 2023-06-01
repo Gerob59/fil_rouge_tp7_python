@@ -9,5 +9,8 @@ from .objet_schema import ObjetSchema
 from .objet_cond_schema import ObjetCondSchema
 from .poids_schema import PoidsSchema
 from .role_schema import RoleSchema
+from .role_base_schema import RoleBase
 from .utilisateur_schema import UtilisateurSchema
+from .utilisateur_base_schema import UtilisateurBase
 from .vignette_schema import VignetteSchema
+from .token_schema import TokenSchema, TokenDataSchema

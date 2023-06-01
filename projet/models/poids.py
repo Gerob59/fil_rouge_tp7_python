@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, Numeric
-from config.db import Base
+from config import Base
 
 
 class Poids(Base):
