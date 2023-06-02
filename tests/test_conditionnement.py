@@ -41,5 +41,3 @@ def test_update_conditionnement():
 def test_delete_conditionnement():
     response = client.delete(f"{URL}{conditionnement_id}")
     assert response.status_code == status.HTTP_200_OK
-
-
