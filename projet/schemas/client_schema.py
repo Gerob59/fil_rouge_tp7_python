@@ -14,12 +14,12 @@ class ClientSchema(BaseModel):
     adresse1cli: constr(max_length=50)
     adresse2cli: Optional[constr(max_length=50)]
     adresse3cli: Optional[constr(max_length=50)]
-    villecli_id: CommuneSchema
+    villecli_id: CommuneSchema = {}
     telcli: constr(max_length=10)
     emailcli: constr(max_length=255)
     portcli: Optional[constr(max_length=10)]
     newsletter: conint(ge=0, le=1) = 0
-    commandes: list[CommandeSchema]
+    commandes: list[CommandeSchema] = []
 
 
     class Config:

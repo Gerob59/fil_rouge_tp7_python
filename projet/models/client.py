@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from config import Base
+from .commande import Commande
 from .commune import Commune
 
 
@@ -20,4 +21,6 @@ class Client(Base):
     emailcli = Column(String(255), default=None)
     portcli = Column(String(10), default=None)
     newsletter = Column(Integer)
+
+    commandes: Mapped[list[Commande]] = relationship()
     

@@ -16,8 +16,8 @@ def get_all_clients(db: Session) -> [ClientSchema]:
     with db:
         res_db = db.query(Client).all()
         res = []
-        for detail in res_db:
-            res.append(ClientSchema.from_orm(detail))
+        for client in res_db:
+            res.append(ClientSchema.from_orm(client))
     return res
 
 

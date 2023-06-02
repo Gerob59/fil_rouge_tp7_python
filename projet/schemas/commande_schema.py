@@ -18,7 +18,7 @@ class CommandeSchema(BaseModel):
     cdeComt: constr(max_length=255) = None
     barchive: conint(ge=0) = 0
     bstock: conint(ge=0) = 0
-    details: list[DetailBase]
+    details: list[DetailBase] = []
 
     class Config:
         orm_mode = True

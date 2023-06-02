@@ -5,6 +5,7 @@ from .conditionnement import Conditionnement
 from .departement import Departement
 from .detail import Detail
 from .detail_objet import DetailObjet
+from .detail_conditionnement import DetailConditionnement
 from .enseigne import Enseigne
 from .objet import Objet
 from .poids import Poids
