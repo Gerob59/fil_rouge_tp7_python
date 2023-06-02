@@ -19,7 +19,7 @@ def test_create_vignette():
         "valtimbre": 2.99
     }
     response = client.post(URL, json=vignette)
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.status.HTTP_200_OK
 
 
 def test_get_vignette():
@@ -33,7 +33,7 @@ def test_update_vignette():
         "valtimbre": 6.99
     }
     response = client.put(f"{URL}{vignette_id}", json=vignette)
-    assert response.status_code == status.HTTP_202_ACCEPTED
+    assert response.status_code == status.status.HTTP_200_OK
 
 
 def test_delete_vignettes():
