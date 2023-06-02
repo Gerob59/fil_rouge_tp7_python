@@ -2,7 +2,7 @@ from fastapi import status
 from starlette.testclient import TestClient
 from projet.main import app
 
-URL: str = "/objet_cond/"
+URL: str = "/poids/"
 poids_id: int = 99999
 client = TestClient(app)
 

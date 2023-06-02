@@ -7,12 +7,12 @@ objet_id: int = 99999
 client = TestClient(app)
 
 
-def test_get_all_poids():
+def test_get_all_objets():
     response = client.get(URL)
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_create_poids():
+def test_create_objet():
     objet = {
         "codobj": objet_id,
         "libobj": "téléphone",
@@ -24,12 +24,12 @@ def test_create_poids():
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_get_poids():
+def test_get_objet():
     response = client.get(f"{URL}{objet_id}")
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_update_poids():
+def test_update_objet():
     objet = {
         "codobj": objet_id,
         "libobj": "brique",
@@ -41,7 +41,7 @@ def test_update_poids():
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_delete_poids():
+def test_delete_objet():
     response = client.delete(f"{URL}{objet_id}")
     assert response.status_code == status.HTTP_200_OK
 
