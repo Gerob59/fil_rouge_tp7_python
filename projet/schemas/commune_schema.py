@@ -1,10 +1,13 @@
+from typing import Optional
 from pydantic import BaseModel
+from pydantic.types import constr
 
 
 class CommuneSchema(BaseModel):
-    id: int  # PrimaryKey
-    dep: str  # ForeignKey('t_dept.code_dept'))
-    cp: str
-    ville: str
+    id: Optional[int]
+    dep: constr(max_length=2)
+    cp: constr(max_length=5) = None
+    ville: constr(max_length=50) = None
+
     class Config:
         orm_mode = True

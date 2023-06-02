@@ -1,13 +1,6 @@
-from datetime import datetime
-from pydantic import BaseModel
+from .role_base_schema import RoleBase
+from .utilisateur_base_schema import UtilisateurBase
 
 
-class UtilisateurSchema(BaseModel):
-    code_utilisateur: int  # PrimaryKey
-    nom_utilisateur: str
-    prenom_utilisateur: str
-    username: str
-    couleur_fond_utilisateur: int
-    date_insc_utilisateur: datetime
-    class Config:
-        orm_mode = True
+class UtilisateurSchema(UtilisateurBase):
+    roles: list[RoleBase] = []

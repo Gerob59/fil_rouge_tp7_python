@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String
-from config.db import Base
+from sqlalchemy.orm import relationship
+
+from config import Base
 
 
 class Role(Base):
@@ -7,4 +9,4 @@ class Role(Base):
 
     codrole = Column(Integer, primary_key=True)
     librole = Column(String(25), default=None)
-    
+    users = relationship("Utilisateur", secondary="t_utilisateur_role", back_populates="roles")

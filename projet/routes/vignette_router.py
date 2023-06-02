@@ -1,18 +1,15 @@
-from fastapi import HTTPException, APIRouter, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from ..schemas import VignetteSchema
 from ..controllers import vignette_controller
-from config.db import get_db
+from ..schemas import VignetteSchema
+from config import get_db
 
 router = APIRouter()
 
 
 @router.get("/{vignette_id}", response_model=VignetteSchema)
 def get_vignette(vignette_id: int, db: Session = Depends(get_db)):
-    vignette = vignette_controller.get_vignette(db, vignette_id)
-    if not vignette:
-        raise HTTPException(status_code=404, detail="Vignette not found")
-    return vignette
+    return vignette_controller.get_vignette(db, vignette_id)
 
 
 @router.get("/", response_model=list[VignetteSchema])
@@ -27,23 +24,14 @@ def create_vignette(vignette: VignetteSchema, db: Session = Depends(get_db)):
 
 @router.put("/{vignette_id}", response_model=VignetteSchema)
 def update_vignette(vignette_id: int, updated_vignette: VignetteSchema, db: Session = Depends(get_db)):
-    vignette = vignette_controller.get_vignette(db, vignette_id)
-    if not vignette:
-        raise HTTPException(status_code=404, detail="Vignette not found")
-    return vignette_controller.update_vignette(db, vignette, updated_vignette)
+    return vignette_controller.update_vignette(db, vignette_id, updated_vignette)
 
 
 @router.patch("/{vignette_id}", response_model=VignetteSchema)
-def update_vignette(vignette_id: int, updated_vignette: VignetteSchema, db: Session = Depends(get_db)):
-    vignette = vignette_controller.get_vignette(db, vignette_id)
-    if not vignette:
-        raise HTTPException(status_code=404, detail="Vignette not found")
-    return vignette_controller.update_vignette(db, vignette, updated_vignette)
+def patch_vignette(vignette_id: int, updated_vignette: VignetteSchema, db: Session = Depends(get_db)):
+    return vignette_controller.update_vignette(db, vignette_id, updated_vignette)
 
 
 @router.delete("/{vignette_id}", response_model=dict)
 def delete_vignette(vignette_id: int, db: Session = Depends(get_db)):
-    vignette = vignette_controller.get_vignette(db, vignette_id)
-    if not vignette:
-        raise HTTPException(status_code=404, detail="Vignette not found")
-    return vignette_controller.delete_vignette(db, vignette)
+    return vignette_controller.delete_vignette(db, vignette_id)

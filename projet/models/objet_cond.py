@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
-from config.db import Base
+from config import Base
 
 
 class ObjetCond(Base):

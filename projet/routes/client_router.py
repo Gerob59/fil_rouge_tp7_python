@@ -1,18 +1,15 @@
-from fastapi import HTTPException, APIRouter, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from ..controllers import client_controller
 from ..schemas import ClientSchema
-from config.db import get_db
+from config import get_db
 
 router = APIRouter()
 
 
 @router.get("/{client_id}", response_model=ClientSchema)
 def get_client(client_id: int, db: Session = Depends(get_db)):
-    client = client_controller.get_client(db, client_id)
-    if not client:
-        raise HTTPException(status_code=404, detail="Client not found")
-    return client
+    return client_controller.get_client(db, client_id)
 
 
 @router.get("/", response_model=list[ClientSchema])
@@ -27,23 +24,14 @@ def create_client(client: ClientSchema, db: Session = Depends(get_db)):
 
 @router.put("/{client_id}", response_model=ClientSchema)
 def update_client(client_id: int, updated_client: ClientSchema, db: Session = Depends(get_db)):
-    client = client_controller.get_client(db, client_id)
-    if not client:
-        raise HTTPException(status_code=404, detail="Client not found")
-    return client_controller.update_client(db, client, updated_client)
+    return client_controller.update_client(db, client_id, updated_client)
 
 
 @router.patch("/{client_id}", response_model=ClientSchema)
 def patch_client(client_id: int, updated_client: ClientSchema, db: Session = Depends(get_db)):
-    client = client_controller.get_client(db, client_id)
-    if not client:
-        raise HTTPException(status_code=404, detail="Client not found")
-    return client_controller.update_client(db, client, updated_client)
+    return client_controller.update_client(db, client_id, updated_client)
 
 
 @router.delete("/{client_id}", response_model=dict)
 def delete_client(client_id: int, db: Session = Depends(get_db)):
-    client = client_controller.get_client(db, client_id)
-    if not client:
-        raise HTTPException(status_code=404, detail="Client not found")
-    return client_controller.delete_client(db, client)
+    return client_controller.delete_client(db, client_id)

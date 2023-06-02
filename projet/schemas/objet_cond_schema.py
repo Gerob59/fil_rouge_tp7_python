@@ -1,16 +1,14 @@
-from typing import List
+from typing import Optional
 from pydantic import BaseModel
-
-from . import ConditionnementSchema, ObjetSchema
+from pydantic.types import conint
 
 
 class ObjetCondSchema(BaseModel):
-    idrelcond: int  # PrimaryKey
-    qteobjdeb: int
-    qteobjfin: int
-    codobj: int  # ForeignKey('t_objet.codobj')
-    codcond: int  # ForeignKey('t_conditionnement.idcondit')
-    objets: List[ObjetSchema]  # relationship("Objet", back_populates='condit')
-    condit: List[ConditionnementSchema]  # relationship("Conditionnement", back_populates='objets')
+    idrelcond: Optional[int]
+    qteobjdeb: conint(ge=0) = 0
+    qteobjfin: conint(ge=0) = 0
+    codobj: int
+    codcond: int
+
     class Config:
         orm_mode = True

@@ -1,41 +1,22 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from .setting import settings
 
-# Configuration de la base de données MySQL
-DATABASE = {
-    'drivername': 'mysql+pymysql',
-    'host': 'localhost',  # par défaut
-    'port': '3306',  # par défaut
-    'username': 'root',
-    'password': '',
-    'database': 'fromagerie',
-}
+if settings.database_password:
+    SQLALCHEMY_DATABASE_URL = f'mysql+pymysql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}'
+else:
+    SQLALCHEMY_DATABASE_URL = f'mysql+pymysql://{settings.database_username}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}'
 
-# Création de l'URL de connexion à la base de données
-# DB_URL = f"{DATABASE['drivername']}://{DATABASE['username']}:{DATABASE['password']}@{DATABASE['host']}:{DATABASE['port']}/{DATABASE['database']}"
-DB_URL = "mysql+pymysql://root@localhost/fromagerie"
-
-# Déclaration de la classe de base pour les modèles
-Base = declarative_base()
-
-# Création du moteur SQLAlchemy
-engine = create_engine(DB_URL)
-
-# Création de l'objet sessionmaker
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 Session = sessionmaker(bind=engine)
-
-
-def initialize_database() -> None:
-    # Création des tables dans la base de données
-    Base.metadata.create_all(engine)
+Base = declarative_base()
 
 
 def get_db() -> Session:
-    """
-    Le mot-clé yield est utilisé pour renvoyer temporairement db.
-    Cela signifie que la première fois que la fonction est appelée, elle renverra db en tant que résultat,
-    mais la fonction elle-même restera suspendue dans son état actuel.
-    """
+    '''
+     retourne la session de connection a la base de donnée, puis ferme cette session une fois l'utilisation terminée
+    :return: Session
+    '''
     db = Session()
     try:
         yield db

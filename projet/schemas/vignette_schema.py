@@ -1,9 +1,12 @@
+from typing import Optional
 from pydantic import BaseModel
+from pydantic.types import confloat
 
 
 class VignetteSchema(BaseModel):
-    id: int  # PrimaryKey
-    valmin: float
-    valtimbre: float
+    id: Optional[int]
+    valmin: confloat(ge=0) = 0
+    valtimbre: confloat(ge=0) = 0
+
     class Config:
         orm_mode = True

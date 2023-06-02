@@ -1,8 +1,6 @@
-from pydantic import BaseModel
+from .role_base_schema import RoleBase
+from .utilisateur_base_schema import UtilisateurBase
 
 
-class RoleSchema(BaseModel):
-    codrole: int  # PrimaryKey
-    librole: str
-    class Config:
-        orm_mode = True
+class RoleSchema(RoleBase):
+    users: list[UtilisateurBase] = []
