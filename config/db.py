@@ -13,6 +13,10 @@ Base = declarative_base()
 
 
 def get_db() -> Session:
+    '''
+     retourne la session de connection a la base de donnée, puis ferme cette session une fois l'utilisation terminée
+    :return: Session
+    '''
     db = Session()
     try:
         yield db

@@ -5,6 +5,12 @@ from ..schemas import ClientSchema
 
 
 def get_client(db: Session, client_id: int) -> ClientSchema:
+    '''
+    retourne un client en fonction d'un id donné
+    :param db: Session
+    :param client_id: int
+    :return: ClientSchema
+    '''
     with db:
         client_db = db.query(Client).get(client_id)
         if not client_db:
@@ -13,12 +19,23 @@ def get_client(db: Session, client_id: int) -> ClientSchema:
 
 
 def get_all_clients(db: Session) -> [ClientSchema]:
+    '''
+    retourne tous les Client de la bdd
+    :param db: Session
+    :return: [ClientSchema]
+    '''
     with db:
         resultat = db.query(Client).all()
     return resultat
 
 
 def create_client(db: Session, client: ClientSchema) -> ClientSchema:
+    '''
+    ajoute un nouveau client en bdd
+    :param db: Session
+    :param client: ClientSchema
+    :return: ClientSchema
+    '''
     with db:
         client_db = Client(**client.dict())
         db.add(client_db)
@@ -28,6 +45,13 @@ def create_client(db: Session, client: ClientSchema) -> ClientSchema:
 
 
 def update_client(db: Session, client_id: int, updated_client: ClientSchema) -> ClientSchema:
+    '''
+    modifie un client en bdd
+    :param db: Session
+    :param client_id: int
+    :param updated_client: ClientSchema
+    :return: ClientSchema
+    '''
     with db:
         client_db = db.query(Client).get(client_id)
         if not client_db:
@@ -41,6 +65,12 @@ def update_client(db: Session, client_id: int, updated_client: ClientSchema) -> 
 
 
 def delete_client(db: Session, client_id: int) -> dict:
+    '''
+    supprime un client en bdd
+    :param db: Session
+    :param client_id: int
+    :return: dict
+    '''
     with db:
         client_db = db.query(Client).get(client_id)
         if not client_db:

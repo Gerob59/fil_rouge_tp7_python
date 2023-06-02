@@ -5,6 +5,12 @@ from ..schemas import CommandeSchema
 
 
 def get_commande(db: Session, commande_id: int) -> CommandeSchema:
+    '''
+        retourne une commande en fonction d'un id donné
+        :param db: Session
+        :param commande_id: int
+        :return: CommandeSchema
+        '''
     with db:
         commande_db = db.query(Commande).get(commande_id)
         if not commande_db:
@@ -13,12 +19,23 @@ def get_commande(db: Session, commande_id: int) -> CommandeSchema:
 
 
 def get_all_commandes(db: Session) -> [CommandeSchema]:
+    '''
+        retourne toutes les commandes de la bdd
+        :param db: Session
+        :return: [CommandeSchema]
+        '''
     with db:
         resultat = db.query(Commande).all()
     return resultat
 
 
 def create_commande(db: Session, commande: CommandeSchema) -> CommandeSchema:
+    '''
+        ajoute une nouvelle commande en bdd
+        :param db: Session
+        :param commande: CommandeSchema
+        :return: CommandeSchema
+    '''
     with db:
         commande_db = Commande(**commande.dict())
         db.add(commande_db)
@@ -28,6 +45,13 @@ def create_commande(db: Session, commande: CommandeSchema) -> CommandeSchema:
 
 
 def update_commande(db: Session, commande_id: int, updated_commande: CommandeSchema) -> CommandeSchema:
+    '''
+        modifie une commande en bdd
+        :param db: Session
+        :param commande_id: int
+        :param updated_commande: CommandeSchema
+        :return: CommandeSchema
+        '''
     with db:
         commande_db = db.query(Commande).get(commande_id)
         if not commande_db:
@@ -41,6 +65,12 @@ def update_commande(db: Session, commande_id: int, updated_commande: CommandeSch
 
 
 def delete_commande(db: Session, commande_id: int) -> dict:
+    '''
+        supprime une commande en bdd
+        :param db:Session
+        :param commande_id: int
+        :return: dict
+        '''
     with db:
         commande_db = db.query(Commande).get(commande_id)
         if not commande_db:

@@ -5,6 +5,12 @@ from ..schemas import ObjetSchema
 
 
 def get_objet(db: Session, objet_id: int) -> ObjetSchema:
+    '''
+        retourne un objet en fonction d'un id donné
+        :param db: Session
+        :param objet_id: int
+        :return: ObjetSchema
+        '''
     with db:
         objet_db = db.query(Objet).get(objet_id)
         if not objet_db:
@@ -13,12 +19,23 @@ def get_objet(db: Session, objet_id: int) -> ObjetSchema:
 
 
 def get_all_objets(db: Session) -> [ObjetSchema]:
+    '''
+       retourne tous les objet de la bdd
+       :param db: Session
+       :return: [ObjetSchema]
+       '''
     with db:
         resultat = db.query(Objet).all()
     return resultat
 
 
 def create_objet(db: Session, objet: ObjetSchema) -> ObjetSchema:
+    '''
+        ajoute un nouveau objet en bdd
+        :param db: Session
+        :param objet: ObjetSchema
+        :return: ObjetSchema
+        '''
     with db:
         objet_db = Objet(**objet.dict())
         db.add(objet_db)
