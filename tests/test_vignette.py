@@ -3,7 +3,7 @@ from starlette.testclient import TestClient
 from projet.main import app
 
 URL: str = "/vignettes/"
-vignette_id: int = 9999
+vignette_id: int = 99999
 client = TestClient(app)
 
 
@@ -15,11 +15,11 @@ def test_get_all_vignettes():
 def test_create_vignette():
     vignette = {
         "id": vignette_id,
-        "valmin": 10.49,
-        "valtimbre": 2.99
+        "valmin": 11,
+        "valtimbre": 3
     }
     response = client.post(URL, json=vignette)
-    assert response.status_code == status.status.HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
 
 
 def test_get_vignette():
@@ -29,13 +29,16 @@ def test_get_vignette():
 
 def test_update_vignette():
     vignette = {
+        "id": vignette_id,
         "valmin": 19.99,
         "valtimbre": 6.99
     }
     response = client.put(f"{URL}{vignette_id}", json=vignette)
-    assert response.status_code == status.status.HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
 
 
-def test_delete_vignettes():
+def test_delete_vignette():
     response = client.delete(f"{URL}{vignette_id}")
     assert response.status_code == status.HTTP_200_OK
+
+
